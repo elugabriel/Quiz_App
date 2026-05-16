@@ -56,7 +56,7 @@ questions = [
 
     {"topic":"Computer Hardware","q_type":"drag_label","image_path":"images/webcam.png",
      "prompt":"Identify the correct label for the image below","answer":"Webcam",
-     "options":["Webcam","Microphone","Camera","Scanner"],"difficulty":"easy"},
+     "options":["Webcam","Microphone","Phone","Scanner"],"difficulty":"easy"},
 
     {"topic":"Computer Hardware","q_type":"drag_label","image_path":"images/scanner.png",
      "prompt":"Identify the correct label for the image below","answer":"Scanner",
@@ -84,7 +84,7 @@ questions = [
 
     {"topic":"Computer Hardware","q_type":"drag_label","image_path":"images/smartphone.png",
      "prompt":"Identify the correct label for the image below","answer":"Smartphone",
-     "options":["Smartphone","Cell phone","Tablet","Mobile"],"difficulty":"easy"},
+     "options":["Smartphone","table phone","PC","Speakers"],"difficulty":"easy"},
 
     {"topic":"Computer Hardware","q_type":"drag_label","image_path":"images/microphone.png",
      "prompt":"Identify the correct label for the image below","answer":"Microphone",
@@ -145,122 +145,350 @@ questions = [
      "options":["Folder","Directory","File","Cabinet"],"difficulty":"easy"},
 
     # ════════════════════════════════════════════════════
-    # DRAG-SORT — NO IMAGES (just text-based ordering)
+    # DRAG-SORT — Phone Repair Activities
     # ════════════════════════════════════════════════════
-    {"topic":"Computer Basics","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to start a computer in the correct order (top = first)",
-     "answer":"Plug in power,Press power button,Wait for startup,Enter password",
-     "options":["Enter password","Wait for startup","Press power button","Plug in power"],"difficulty":"easy"},
 
-    {"topic":"Computer Basics","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to shut down a computer correctly (top = first)",
-     "answer":"Click Start,Click Power icon,Select Shut down,Wait for shutdown",
-     "options":["Select Shut down","Click Power icon","Wait for shutdown","Click Start"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to replace a cracked phone screen (top = first)",
+     "answer":"Power off phone,Remove SIM tray,Heat screen edges,Remove broken screen,Connect new screen,Test display,Seal phone",
+     "options":["Remove broken screen","Power off phone","Seal phone","Heat screen edges","Test display","Connect new screen","Remove SIM tray"],
+     "difficulty":"hard"},
 
-    {"topic":"Email","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to send an email (top = first)",
-     "answer":"Open email,Click Compose,Type address,Write message,Click Send",
-     "options":["Click Send","Write message","Click Compose","Type address","Open email"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to replace a phone battery (top = first)",
+     "answer":"Power off phone,Open back cover,Disconnect old battery,Remove old battery,Insert new battery,Connect new battery,Close back cover,Power on",
+     "options":["Insert new battery","Power off phone","Power on","Open back cover","Connect new battery","Disconnect old battery","Close back cover","Remove old battery"],
+     "difficulty":"hard"},
 
-    {"topic":"Internet","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to search the internet (top = first)",
-     "answer":"Open browser,Type search words,Press Enter,Click on result",
-     "options":["Click on result","Open browser","Press Enter","Type search words"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to troubleshoot a phone that won't charge (top = first)",
+     "answer":"Check charging cable,Try different cable,Clean charging port,Try different charger,Restart phone,Check battery health,Replace charging port",
+     "options":["Try different charger","Restart phone","Check charging cable","Replace charging port","Try different cable","Check battery health","Clean charging port"],
+     "difficulty":"medium"},
 
-    {"topic":"File Management","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to save a file (top = first)",
-     "answer":"Click File,Click Save As,Choose location,Type name,Click Save",
-     "options":["Click Save As","Click Save","Choose location","Type name","Click File"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to replace a phone charging port (top = first)",
+     "answer":"Power off phone,Open phone case,Locate charging port,Unsolder old port,Solder new port,Test charging,Close case",
+     "options":["Solder new port","Open phone case","Test charging","Power off phone","Close case","Locate charging port","Unsolder old port"],
+     "difficulty":"hard"},
 
-    {"topic":"File Management","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to print a document (top = first)",
-     "answer":"Open document,Click File,Click Print,Choose printer,Click Print",
-     "options":["Click Print","Choose printer","Open document","Click File","Click Print"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to handle a water-damaged phone (top = first)",
+     "answer":"Power off immediately,Remove SIM and SD card,Dry exterior,Place in silica gel,Wait 48 hours,Power on,Test functions",
+     "options":["Power on","Place in silica gel","Dry exterior","Remove SIM and SD card","Test functions","Power off immediately","Wait 48 hours"],
+     "difficulty":"medium"},
 
-    {"topic":"File Management","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to copy a file (top = first)",
-     "answer":"Select file,Right-click,Choose Copy,Go to destination,Right-click,Paste",
-     "options":["Paste","Choose Copy","Go to destination","Select file","Right-click","Right-click"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to factory reset a phone (top = first)",
+     "answer":"Backup data,Open Settings,Go to General Management,Select Reset,Select Factory Reset,Confirm reset,Wait for restart",
+     "options":["Select Factory Reset","Open Settings","Wait for restart","Backup data","Confirm reset","Go to General Management","Select Reset"],
+     "difficulty":"medium"},
 
-    {"topic":"Computer Setup","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to set up a new computer (top = first)",
-     "answer":"Unbox computer,Connect monitor,Connect keyboard,Connect mouse,Plug in power,Press power",
-     "options":["Press power","Connect mouse","Unbox computer","Connect monitor","Connect keyboard","Plug in power"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to replace a broken phone camera lens (top = first)",
+     "answer":"Power off phone,Heat lens area,Remove broken lens,Clean lens housing,Attach new lens,Test camera,Power on",
+     "options":["Test camera","Remove broken lens","Power off phone","Power on","Attach new lens","Clean lens housing","Heat lens area"],
+     "difficulty":"hard"},
 
-    {"topic":"WiFi Setup","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to connect to WiFi (top = first)",
-     "answer":"Click WiFi icon,Select network,Type password,Click Connect",
-     "options":["Click WiFi icon","Type password","Select network","Click Connect"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to fix an unresponsive touchscreen (top = first)",
+     "answer":"Restart phone,Clean screen,Remove screen protector,Check for software update,Calibrate touchscreen,Open back cover,Reseat screen connector",
+     "options":["Remove screen protector","Restart phone","Reseat screen connector","Open back cover","Calibrate touchscreen","Check for software update","Clean screen"],
+     "difficulty":"medium"},
 
-    {"topic":"Software Installation","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to install a program (top = first)",
-     "answer":"Download installer,Open installer,Click Next,Agree to terms,Choose location,Click Install",
-     "options":["Click Install","Choose location","Open installer","Agree to terms","Download installer","Click Next"],"difficulty":"medium"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to replace a phone speaker (top = first)",
+     "answer":"Power off phone,Open back cover,Locate speaker,Disconnect speaker,Remove speaker,Install new speaker,Connect new speaker,Close back cover,Test audio",
+     "options":["Remove speaker","Open back cover","Test audio","Locate speaker","Power off phone","Install new speaker","Disconnect speaker","Connect new speaker","Close back cover"],
+     "difficulty":"hard"},
 
-    {"topic":"USB Drive","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to safely remove a USB drive (top = first)",
-     "answer":"Click USB icon,Select Eject,Wait for message,Pull out USB",
-     "options":["Select Eject","Click USB icon","Pull out USB","Wait for message"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to troubleshoot an overheating phone (top = first)",
+     "answer":"Power off phone,Remove case,Close background apps,Check for malware,Update software,Check battery condition,Replace battery if faulty",
+     "options":["Check battery condition","Power off phone","Update software","Replace battery if faulty","Remove case","Check for malware","Close background apps"],
+     "difficulty":"medium"},
 
-    {"topic":"Taking Screenshot","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to take a screenshot (top = first)",
-     "answer":"Press PrtScn key,Open Paint,Paste image,Crop if needed,Save file",
-     "options":["Open Paint","Paste image","Press PrtScn key","Crop if needed","Save file"],"difficulty":"medium"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to recover data from a broken phone (top = first)",
+     "answer":"Connect phone to PC,Enable USB debugging,Open recovery software,Scan phone storage,Select files to recover,Export files to PC",
+     "options":["Scan phone storage","Connect phone to PC","Export files to PC","Enable USB debugging","Select files to recover","Open recovery software"],
+     "difficulty":"hard"},
 
-    {"topic":"Password Creation","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange these passwords from WEAKEST to STRONGEST (top = weakest)",
-     "answer":"123456,password,Football,Summer2024,Tr0ub4dour&2024",
-     "options":["Football","Summer2024","123456","password","Tr0ub4dour&2024"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to replace a faulty power button (top = first)",
+     "answer":"Power off phone,Open phone casing,Locate power button flex cable,Disconnect flex cable,Remove button assembly,Install new button,Reconnect flex cable,Close casing,Test button",
+     "options":["Install new button","Open phone casing","Test button","Power off phone","Close casing","Disconnect flex cable","Reconnect flex cable","Remove button assembly","Locate power button flex cable"],
+     "difficulty":"hard"},
 
-    {"topic":"Data Sizes","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange these data sizes from SMALLEST to LARGEST (top = smallest)",
-     "answer":"Bit,Byte,KB,MB,GB,TB",
-     "options":["MB","KB","TB","Byte","GB","Bit"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to update phone software to fix bugs (top = first)",
+     "answer":"Charge phone above 50%,Connect to WiFi,Open Settings,Go to Software Update,Download update,Install update,Wait for restart",
+     "options":["Install update","Charge phone above 50%","Wait for restart","Go to Software Update","Connect to WiFi","Download update","Open Settings"],
+     "difficulty":"easy"},
 
-    {"topic":"File Sizes","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange these files from SMALLEST to LARGEST (top = smallest)",
-     "answer":"Text file,Word doc,Music song,Video clip,Full movie",
-     "options":["Video clip","Music song","Full movie","Word doc","Text file"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to safely clean a blocked charging port (top = first)",
+     "answer":"Power off phone,Get a toothpick or brush,Gently remove debris,Use compressed air,Inspect port,Power on,Test charging",
+     "options":["Inspect port","Power off phone","Test charging","Get a toothpick or brush","Power on","Use compressed air","Gently remove debris"],
+     "difficulty":"easy"},
 
-    {"topic":"Computer Speed","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange these tasks from FASTEST to SLOWEST for a computer (top = fastest)",
-     "answer":"Type letter,Open photo,Play music,Play video,Start game",
-     "options":["Play game","Type letter","Open photo","Play music","Play video"],"difficulty":"medium"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to fix a phone stuck in a bootloop (top = first)",
+     "answer":"Remove battery if possible,Wait 30 seconds,Reinsert battery,Boot into recovery mode,Wipe cache partition,Reboot phone,Factory reset if needed",
+     "options":["Factory reset if needed","Remove battery if possible","Reboot phone","Reinsert battery","Boot into recovery mode","Wait 30 seconds","Wipe cache partition"],
+     "difficulty":"hard"},
 
-    {"topic":"Backup Steps","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to backup files (top = first)",
-     "answer":"Plug USB,Open files,Select files,Drag to USB,Wait for copy,Eject USB",
-     "options":["Drag to USB","Select files","Open files","Eject USB","Wait for copy","Plug USB"],"difficulty":"medium"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to replace a phone back cover (top = first)",
+     "answer":"Power off phone,Heat back cover,Insert prying tool at edge,Slide tool around edges,Lift off back cover,Attach new back cover,Press edges to seal",
+     "options":["Insert prying tool at edge","Power off phone","Press edges to seal","Lift off back cover","Attach new back cover","Heat back cover","Slide tool around edges"],
+     "difficulty":"medium"},
 
-    {"topic":"Browser Tabs","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to open a new browser tab (top = first)",
-     "answer":"Open browser,Click + icon,Type website,Press Enter",
-     "options":["Press Enter","Click + icon","Type website","Open browser"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to test a phone after completing repairs (top = first)",
+     "answer":"Power on phone,Test touchscreen,Test speaker and microphone,Test cameras,Test charging,Test WiFi and Bluetooth,Make a test call",
+     "options":["Test WiFi and Bluetooth","Power on phone","Make a test call","Test cameras","Test touchscreen","Test charging","Test speaker and microphone"],
+     "difficulty":"medium"},
 
-    {"topic":"Bookmark Webpage","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to bookmark a webpage (top = first)",
-     "answer":"Go to website,Click star icon,Choose folder,Click Done",
-     "options":["Click star icon","Go to website","Choose folder","Click Done"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to fix a phone with no sound (top = first)",
+     "answer":"Check volume settings,Disable silent mode,Test with headphones,Restart phone,Clear cache,Check speaker for damage,Replace speaker",
+     "options":["Replace speaker","Check volume settings","Restart phone","Test with headphones","Check speaker for damage","Clear cache","Disable silent mode"],
+     "difficulty":"medium"},
 
-    {"topic":"Clear History","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to clear browsing history (top = first)",
-     "answer":"Click menu,Go to History,Click Clear data,Choose time range,Click Clear",
-     "options":["Click Clear data","Clear","Choose time range","Click menu","Go to History"],"difficulty":"medium"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to safely disassemble a smartphone (top = first)",
+     "answer":"Power off phone,Remove SIM tray,Heat edges to loosen adhesive,Pry open back cover,Unscrew internal screws,Disconnect battery,Remove components carefully",
+     "options":["Unscrew internal screws","Remove SIM tray","Disconnect battery","Heat edges to loosen adhesive","Power off phone","Remove components carefully","Pry open back cover"],
+     "difficulty":"hard"},
 
-    {"topic":"Zoom Meeting","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to join a Zoom meeting (top = first)",
-     "answer":"Open Zoom,Click Join,Enter Meeting ID,Enter password,Click Join",
-     "options":["Enter password","Open Zoom","Join","Enter Meeting ID","Click Join"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to fix a phone with broken WiFi (top = first)",
+     "answer":"Toggle WiFi off and on,Restart phone,Forget and reconnect to network,Reset network settings,Check for software update,Open phone,Inspect WiFi antenna",
+     "options":["Inspect WiFi antenna","Toggle WiFi off and on","Check for software update","Restart phone","Open phone","Reset network settings","Forget and reconnect to network"],
+     "difficulty":"medium"},
 
-    {"topic":"Email Attachment","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to attach a file to an email (top = first)",
-     "answer":"Compose email,Click Attach,Find file,Select file,Click Open",
-     "options":["Attach","Select file","Compose email","Click Open","Find file"],"difficulty":"easy"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to replace a damaged SIM card tray (top = first)",
+     "answer":"Power off phone,Insert SIM ejector pin,Remove old tray,Insert SIM into new tray,Slide new tray into slot,Power on phone,Verify network connection",
+     "options":["Insert SIM into new tray","Power off phone","Verify network connection","Slide new tray into slot","Remove old tray","Insert SIM ejector pin","Power on phone"],
+     "difficulty":"easy"},
 
-    {"topic":"Hardware Upgrade","q_type":"drag_sort","image_path":"",
-     "prompt":"Drag and arrange the steps to install new RAM (top = first)",
-     "answer":"Shut down computer,Open case,Find RAM slots,Insert RAM,Close case,Power on",
-     "options":["Find RAM slots","Insert RAM","Open case","Power on","Shut down computer","Close case"],"difficulty":"hard"},
+    {"topic":"Phone Repair","q_type":"drag_sort","image_path":"",
+     "prompt":"Drag and arrange the steps to fix GPS not working on a phone (top = first)",
+     "answer":"Enable Location Services,Toggle GPS off and on,Check app permissions,Calibrate GPS,Clear GPS cache,Update software,Check GPS antenna connection",
+     "options":["Update software","Enable Location Services","Check GPS antenna connection","Clear GPS cache","Toggle GPS off and on","Check app permissions","Calibrate GPS"],
+     "difficulty":"medium"},
+
+    # ════════════════════════════════════════════════════
+    # TRUE/FALSE — Hardware Functions (22 questions)
+    # ════════════════════════════════════════════════════
+
+    # --- CPU ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"The CPU (Central Processing Unit) is the main chip that processes instructions and runs programs on a computer.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"The CPU is responsible for storing large amounts of files and documents permanently.",
+     "answer":"False","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A faster CPU generally means a computer can process tasks more quickly.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    # --- RAM ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"RAM (Random Access Memory) temporarily stores data that the CPU is actively using.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"Data stored in RAM is permanently saved even after the computer is turned off.",
+     "answer":"False","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"Adding more RAM to a computer can help it run more programs at the same time without slowing down.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    # --- Motherboard ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"The motherboard is the main circuit board that connects all components of a computer together.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"The motherboard can function normally without a CPU installed.",
+     "answer":"False","options":["True","False"],"difficulty":"medium"},
+
+    # --- GPU ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"The GPU (Graphics Processing Unit) is responsible for rendering images, videos, and animations on screen.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A dedicated GPU is more important than RAM when running word processing applications.",
+     "answer":"False","options":["True","False"],"difficulty":"medium"},
+
+    # --- HDD vs SSD ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A Hard Disk Drive (HDD) uses spinning magnetic disks to store data permanently.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"An SSD (Solid State Drive) is generally faster than a traditional HDD because it has no moving parts.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"An HDD and an SSD serve completely different purposes and cannot both be used to store files.",
+     "answer":"False","options":["True","False"],"difficulty":"medium"},
+
+    # --- PSU ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"The Power Supply Unit (PSU) converts electricity from the wall outlet into the correct voltages needed by computer components.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A faulty PSU can damage other components inside a computer.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    # --- Monitor ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A monitor is an output device that displays visual information from the computer.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A monitor can send data back to the CPU for processing, making it both an input and output device.",
+     "answer":"False","options":["True","False"],"difficulty":"medium"},
+
+    # --- Keyboard & Mouse ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"Both the keyboard and mouse are input devices used to send instructions to the computer.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    # --- Router ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A router directs internet traffic between devices on a network and connects them to the internet.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A router and a modem are exactly the same device with the same function.",
+     "answer":"False","options":["True","False"],"difficulty":"medium"},
+
+    # --- Printer & Scanner ---
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A printer is an output device that produces a physical copy of digital documents.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"Hardware Functions","q_type":"true_false","image_path":"",
+     "prompt":"A scanner converts physical documents or images into digital files the computer can use.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    # ════════════════════════════════════════════════════
+    # TRUE/FALSE — GSM / Phone Repair Knowledge (22 questions)
+    # ════════════════════════════════════════════════════
+
+    # --- GSM Basics ---
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"GSM stands for Global System for Mobile Communications and is used for transmitting voice and data on mobile networks.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"A SIM card stores a subscriber's identity and allows a phone to connect to a mobile network.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Removing the SIM card from a phone while it is powered on can damage the SIM card or phone network settings.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"A phone showing 'No Service' always means the SIM card is permanently damaged and must be replaced.",
+     "answer":"False","options":["True","False"],"difficulty":"easy"},
+
+    # --- Phone Battery ---
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"A swollen phone battery is dangerous and the phone should be powered off and serviced immediately.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"It is safe to continue using a phone with a swollen battery as long as it still charges.",
+     "answer":"False","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Phone batteries lose capacity over time and may need to be replaced after 1–3 years of heavy use.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    # --- Charging & Ports ---
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Dust and debris inside the charging port is a common cause of a phone not charging properly.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Using a sharp metal object to clean a phone's charging port is the safest and recommended method.",
+     "answer":"False","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"A damaged charging port can be replaced without replacing the entire phone.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    # --- Screen & Display ---
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"A phone screen that shows lines or dead pixels may have a damaged LCD or AMOLED display panel.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Replacing a cracked phone screen always requires special tools and cannot be done by hand alone.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"A cracked screen protector always means the phone screen underneath is also cracked.",
+     "answer":"False","options":["True","False"],"difficulty":"easy"},
+
+    # --- Water Damage ---
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"The first thing to do when a phone falls in water is to immediately press the power button to check if it still works.",
+     "answer":"False","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Placing a water-damaged phone in a bag of silica gel or uncooked rice can help absorb moisture.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Water damage indicators (small stickers inside the phone) turn red or pink when exposed to moisture.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    # --- Software & Firmware ---
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Flashing a phone's firmware can fix software problems that cause a phone to freeze or not start up.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"A factory reset removes all apps and personal data from a phone and restores it to its original settings.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"You should always back up your data before performing a factory reset.",
+     "answer":"True","options":["True","False"],"difficulty":"easy"},
+
+    # --- Components & Tools ---
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"A heat gun or heated pad is commonly used in phone repair to soften adhesive holding the screen or back cover.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"ESD (Electrostatic Discharge) can damage sensitive phone components, so technicians should use anti-static tools.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Any screwdriver can be safely used to open a smartphone, regardless of the screw type.",
+     "answer":"False","options":["True","False"],"difficulty":"easy"},
+
+    # --- Network & Signal ---
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"A broken or bent internal antenna can cause poor call quality or loss of network signal on a phone.",
+     "answer":"True","options":["True","False"],"difficulty":"medium"},
+
+    {"topic":"GSM Repair","q_type":"true_false","image_path":"",
+     "prompt":"Inserting a SIM card from one network operator always works in any phone without any configuration.",
+     "answer":"False","options":["True","False"],"difficulty":"medium"},
 ]
 
 # Add additional drag-label questions (without revealing names in filenames)
@@ -274,7 +502,7 @@ additional_hardware = [
 ]
 
 current_label_count = sum(1 for q in questions if q["q_type"] == "drag_label")
-needed = 50 - current_label_count  # Aim for 50 drag-label, 50 drag-sort
+needed = 50 - current_label_count  # Aim for 50 drag-label
 
 for img, ans, opts in additional_hardware[:needed]:
     questions.append({
@@ -288,8 +516,9 @@ for img, ans, opts in additional_hardware[:needed]:
     })
 
 print(f"Total questions: {len(questions)}")
-print(f"Drag-label (images): {sum(1 for q in questions if q['q_type'] == 'drag_label')}")
-print(f"Drag-sort (text only): {sum(1 for q in questions if q['q_type'] == 'drag_sort')}")
+print(f"Drag-label (images):  {sum(1 for q in questions if q['q_type'] == 'drag_label')}")
+print(f"Drag-sort (ordering): {sum(1 for q in questions if q['q_type'] == 'drag_sort')}")
+print(f"True/False:           {sum(1 for q in questions if q['q_type'] == 'true_false')}")
 
 with app.app_context():
     db.create_all()
