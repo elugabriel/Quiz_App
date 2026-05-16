@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}Quiz — CompuQuiz{% endblock %}
+
+{% block content %}
+<div class="quiz-wrapper">
+
+  <!-- Top progress strip -->
+  <div class="top-bar">
+    <div class="top-bar-inner">
+      <span class="q-counter" id="q-counter">Question <strong>1</strong> of {{ questions|length }}</span>
+      <div class="dot-track" id="dot-track">
+        {% for q in questions %}
+          <span class="dot" id="dot-{{ loop.index0 }}"></span>
+        {% endfor %}
+      </div>
+      <span class="score-live">⭐ <span id="live-score">0</span> pts</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progress-bar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Single question stage -->
+  <div class="stage" id="stage">
+
+    {% for q in questions %}
+    <div class="question-slide {% if loop.first %}active{% endif %}"
+         data-qid="{{ q.id }}"
+         data-qtype="{{ q.q_type }}"
+         data-index="{{ loop.index0 }}"
+         id="slide-{{ loop.index0 }}">
+
+      <!-- Image / visual area -->
+      {% if q.image_path %}
+      <div class="slide-image-wrap">
+        <img src="{{ url_for('static', filename=q.image_path) }}"
+             alt="Component image"
+             class="slide-image"
+             onerror="this.parentElement.classList.add('img-error'); this.style.display='none'">
+      </div>
+      {% endif %}
+
+      <!-- Drop target (hidden for drag_sort which uses its own list) -->
+      <div class="answer-area{% if q.q_type == 'drag_sort' %} hidden{% endif %}">
+        <p class="slide-prompt">{{ q.prompt }}</p>
+        <div class="drop-target" data-qid="{{ q.id }}" id="drop-{{ q.id }}">
+          <span class="drop-ghost">Drop the correct answer here</span>
+          <span class="placed-answer hidden"></span>
+          <button class="remove-btn hidden" onclick="clearAnswer('{{ q.id }}', {{ loop.index0 }})">✕ Remove</button>
+        </div>
+      </div>
+      {% if q.q_type == 'drag_sort' %}
+      <p class="slide-prompt sort-prompt">{{ q.prompt }}</p>
+      {% endif %}
+
+      <!-- Options: chips for drag_label, sortable list for drag_sort -->
+      {% if q.q_type == "drag_sort" %}
+      <div class="sort-instruction">☰ Drag items into the correct order — top = first</div>
+      <ul class="sortable-list" id="sort-{{ q.id }}" data-qid="{{ q.id }}" data-slide="{{ loop.index0 }}">
+        {% for opt in q.options %}
+          <li class="sort-item" draggable="true" data-label="{{ opt }}">
+            <span class="sort-handle">⠿</span>
+            <span class="sort-text">{{ opt }}</span>
+            <span class="sort-pos"></span>
+          </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <div class="options-rack" id="rack-{{ loop.index0 }}">
+        {% for opt in q.options %}
+          <div class="option-chip"
+               draggable="true"
+               data-label="{{ opt }}"
+               data-qid="{{ q.id }}"
+               data-slide="{{ loop.index0 }}"
+               id="chip-{{ q.id }}-{{ loop.index }}">
+            {{ opt }}
+          </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Navigation row -->
+      <div class="nav-row">
+        {% if not loop.first %}
+          <button class="btn-nav btn-back" onclick="goToSlide({{ loop.index0 - 1 }})">← Back</button>
+        {% else %}
+          <span></span>
+        {% endif %}
+
+        {% if not loop.last %}
+          <button class="btn-nav btn-next" id="next-{{ loop.index0 }}" onclick="goToSlide({{ loop.index0 + 1 }})" disabled>
+            Next →
+          </button>
+        {% else %}
+          <button class="btn-nav btn-submit" id="submit-btn" onclick="submitQuiz()" disabled>
+            Submit ✓
+          </button>
+        {% endif %}
+      </div>
+
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+<!-- Pass questions data to JS -->
+<script>
+  window.QUIZ_QUESTIONS  = {{ questions | tojson }};
+  window.TOTAL_QUESTIONS = {{ questions | length }};
+</script>
+{% endblock %}

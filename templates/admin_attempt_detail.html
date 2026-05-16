@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attempt Details - {{ student.name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6fc;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .navbar h2 {
+            color: white;
+            font-size: 20px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+        
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+        
+        .summary-card h1 {
+            color: #1a237e;
+            margin-bottom: 15px;
+        }
+        
+        .score-display {
+            font-size: 48px;
+            font-weight: bold;
+            color: #1a237e;
+            margin: 20px 0;
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        
+        .question-card.correct {
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .question-card.incorrect {
+            border-left: 5px solid #f44336;
+        }
+        
+        .question-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .answer-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .student-answer {
+            background: #f5f5f5;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .correct-answer {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 10px 0;
+            color: #2e7d32;
+        }
+        
+        .status-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        
+        .question-image {
+            max-width: 300px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        
+        .back-btn {
+            background: #666;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            background: #555;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>📝 Attempt Review</h2>
+        <div class="nav-links">
+            <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('admin_logout') }}">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <a href="{{ url_for('admin_student_detail', student_id=student.id) }}" class="back-btn">← Back to Student</a>
+        
+        <div class="summary-card">
+            <h1>{{ student.name }}'s Quiz Attempt</h1>
+            <div class="score-display">
+                Score: {{ attempt.score }}/20 ({{ attempt.percentage }}%)
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ attempt.percentage }}%"></div>
+            </div>
+            <p><strong>Date:</strong> {{ attempt.finished_at.strftime('%B %d, %Y at %H:%M:%S') }}</p>
+            <p><strong>Result:</strong> {{ '✅ PASSED' if attempt.passed else '❌ FAILED' }}</p>
+        </div>
+        
+        <h3 style="margin-bottom: 20px;">📋 Detailed Answers</h3>
+        
+        {% for q in questions %}
+        <div class="question-card {{ 'correct' if q.is_correct else 'incorrect' }}">
+            <div style="display: flex; align-items: center;">
+                <span class="status-icon">{{ '✅' if q.is_correct else '❌' }}</span>
+                <div class="question-text">{{ q.prompt }}</div>
+            </div>
+            
+            {% if q.image_path %}
+            <img src="{{ url_for('static', filename=q.image_path) }}" class="question-image" alt="Question image">
+            {% endif %}
+            
+            <div class="answer-section">
+                <div class="student-answer">
+                    <strong>📝 Student's Answer:</strong><br>
+                    {% if q.q_type == 'drag_sort' %}
+                        {% set answers = q.given_answer.split(',') if ',' in q.given_answer else [q.given_answer] %}
+                        {% for ans in answers %}
+                            {{ loop.index }}. {{ ans.strip() }}<br>
+                        {% endfor %}
+                    {% else %}
+                        {{ q.given_answer or '(No answer provided)' }}
+                    {% endif %}
+                </div>
+                
+                {% if not q.is_correct %}
+                <div class="correct-answer">
+                    <strong>✓ Correct Answer:</strong><br>
+                    {% if q.q_type == 'drag_sort' %}
+                        {% set corrects = q.correct_answer.split(',') %}
+                        {% for ans in corrects %}
+                            {{ loop.index }}. {{ ans.strip() }}<br>
+                        {% endfor %}
+                    {% else %}
+                        {{ q.correct_answer }}
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Quiz - Interactive Assessment Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6fc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        /* Navbar styling matching your platform */
+        .navbar {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            padding: 15px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+        
+        .navbar a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Flash messages */
+        .flash {
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .flash.success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+        
+        .flash.error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+        
+        /* Quiz Header */
+        .quiz-header {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 14px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        
+        .quiz-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+        
+        .quiz-header p {
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .score-badge {
+            background: #ff9800;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+        
+        /* Question Container */
+        .question-container {
+            background: white;
+            border-radius: 14px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            transition: transform 0.2s;
+        }
+        
+        .question-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+        
+        .question-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .question-image {
+            max-width: 100%;
+            max-height: 250px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Drag Label Styles */
+        .drag-label-container {
+            margin: 20px 0;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 15px 0;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 12px;
+            min-height: 80px;
+        }
+        
+        .drag-option {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: grab;
+            user-select: none;
+            display: inline-block;
+            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .drag-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            background: linear-gradient(135deg, #3949ab 0%, #5c6bc0 100%);
+        }
+        
+        .drag-option:active {
+            cursor: grabbing;
+        }
+        
+        .drag-option.dragging {
+            opacity: 0.5;
+        }
+        
+        .drop-zone {
+            background: #f8f9fa;
+            border: 2px dashed #aaa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            transition: all 0.2s;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .drop-zone.drag-over {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        
+        .dropped-item {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+        
+        .remove-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .remove-btn:hover {
+            background: #d32f2f;
+        }
+        
+        /* Drag Sort Styles */
+        .sort-container {
+            margin: 20px 0;
+        }
+        
+        .sort-instruction {
+            background: #e3f2fd;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            color: #1a237e;
+            font-size: 14px;
+        }
+        
+        .sort-items-list {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 12px;
+            min-height: 200px;
+        }
+        
+        .sort-item {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 10px;
+            cursor: grab;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        
+        .sort-item:hover {
+            transform: translateX(5px);
+            background: linear-gradient(135deg, #3949ab 0%, #5c6bc0 100%);
+        }
+        
+        .sort-item:active {
+            cursor: grabbing;
+        }
+        
+        .sort-item.dragging {
+            opacity: 0.5;
+        }
+        
+        .sort-item.drag-over {
+            border-top: 3px solid #ff9800;
+            margin-top: -3px;
+        }
+        
+        .sort-handle {
+            cursor: grab;
+            font-size: 18px;
+            margin-right: 12px;
+            opacity: 0.7;
+        }
+        
+        .sort-position {
+            background: rgba(0,0,0,0.3);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        /* Submit Button */
+        .submit-btn {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #3949ab 0%, #5c6bc0 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* Results Styles */
+        .result-card {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+        
+        .result-card.correct {
+            border-left: 5px solid #28a745;
+            background: #f0fff4;
+        }
+        
+        .result-card.incorrect {
+            border-left: 5px solid #dc3545;
+            background: #fff5f5;
+        }
+        
+        .result-header {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .action-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .btn-retake {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-leaderboard {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .btn-logout {
+            background: #666;
+            color: white;
+        }
+        
+        .action-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* Progress Footer */
+        .progress-footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a237e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .navbar {
+                padding: 10px 15px;
+            }
+            
+            .navbar a {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+            
+            .quiz-header {
+                padding: 20px;
+            }
+            
+            .quiz-header h2 {
+                font-size: 22px;
+            }
+            
+            .question-container {
+                padding: 15px;
+            }
+            
+            .drag-option {
+                padding: 6px 14px;
+                font-size: 12px;
+            }
+            
+            .sort-item {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            
+            .progress-footer {
+                bottom: 10px;
+                right: 10px;
+                font-size: 11px;
+                padding: 8px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar - Fixed to work with your routes -->
+    <div class="navbar">
+        <a href="{{ url_for('login') }}">Home</a>
+        {% if session.get('student_id') %}
+            <a href="{{ url_for('quiz') }}">Quiz</a>
+            <a href="{{ url_for('leaderboard') }}">Leaderboard</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        {% elif session.get('admin_id') %}
+            <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+            <a href="{{ url_for('admin_logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}">Student Login</a>
+            <a href="{{ url_for('admin_login') }}">Admin Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+    </div>
+    
+    <div class="container">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="flash {{ category }}">{{ msg }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Quiz Content -->
+        <div class="quiz-header">
+            <h2>📝 Computer Fundamentals Quiz</h2>
+            <p>Test your knowledge by dragging and dropping the correct answers!</p>
+            <div class="quiz-info">
+                <span>👤 <strong>{{ student_name }}</strong></span>
+                <span class="score-badge">✅ Answered: <span id="current-score">0</span>/<span id="total-questions">{{ total_questions }}</span></span>
+            </div>
+        </div>
+        
+        <form id="quiz-form">
+            {% for q in questions %}
+            <div class="question-container" data-question-id="{{ q.id }}" data-question-type="{{ q.q_type }}">
+                <div class="question-title">
+                    Question {{ loop.index }}: {{ q.prompt }}
+                </div>
+                
+                {% if q.image_path %}
+                <img src="{{ url_for('static', filename=q.image_path) }}" class="question-image" alt="Question image">
+                {% endif %}
+                
+                <!-- Drag Label Interface -->
+                {% if q.q_type == 'drag_label' %}
+                <div class="drag-label-container">
+                    <div class="options-container">
+                        {% for option in q.options %}
+                        <div class="drag-option" draggable="true" data-value="{{ option }}">{{ option }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="drop-zone" data-question-id="{{ q.id }}">
+                        🎯 Drop your answer here
+                    </div>
+                    <input type="hidden" name="answer_{{ q.id }}" id="answer_{{ q.id }}" value="">
+                </div>
+                {% endif %}
+                
+                <!-- Drag Sort Interface -->
+                {% if q.q_type == 'drag_sort' %}
+                <div class="sort-container">
+                    <div class="sort-instruction">
+                        🔄 Drag and drop items to arrange them in the correct order (top = first, bottom = last)
+                    </div>
+                    <div class="sort-items-list" data-question-id="{{ q.id }}">
+                        {% set options = q.options|sort %}
+                        {% for option in options %}
+                        <div class="sort-item" draggable="true" data-value="{{ option }}">
+                            <span>
+                                <span class="sort-handle">⋮⋮</span>
+                                {{ option }}
+                            </span>
+                            <span class="sort-position">{{ loop.index }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="answer_{{ q.id }}" id="answer_{{ q.id }}" value="">
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <button type="button" class="submit-btn" onclick="submitQuiz()">📤 Submit Quiz</button>
+        </form>
+        
+        <div id="results" style="display: none;"></div>
+    </div>
+    
+    <div class="progress-footer" id="progress-indicator">
+        📊 Progress: 0%
+    </div>
+    
+    <script>
+        // ========== INITIALIZATION ==========
+        let totalQuestions = {{ total_questions }};
+        let userAnswers = {};
+        let answeredCount = 0;
+        
+        // Set total questions display
+        document.getElementById('total-questions').textContent = totalQuestions;
+        document.getElementById('current-score').textContent = '0';
+        updateProgressIndicator();
+        
+        function updateScore() {
+            answeredCount = 0;
+            for (let qid in userAnswers) {
+                if (userAnswers[qid] && userAnswers[qid] !== '' && 
+                    (!Array.isArray(userAnswers[qid]) || userAnswers[qid].length > 0)) {
+                    answeredCount++;
+                }
+            }
+            document.getElementById('current-score').textContent = answeredCount;
+            updateProgressIndicator();
+        }
+        
+        function updateProgressIndicator() {
+            const percentage = Math.round((answeredCount / totalQuestions) * 100);
+            document.getElementById('progress-indicator').textContent = `📊 Progress: ${percentage}%`;
+        }
+        
+        // ========== DRAG LABEL FUNCTIONALITY ==========
+        function initializeDragLabel() {
+            document.querySelectorAll('.drag-option').forEach(dragElement => {
+                dragElement.removeEventListener('dragstart', dragStartHandler);
+                dragElement.removeEventListener('dragend', dragEndHandler);
+                
+                dragElement.addEventListener('dragstart', dragStartHandler);
+                dragElement.addEventListener('dragend', dragEndHandler);
+            });
+            
+            document.querySelectorAll('.drop-zone').forEach(dropZone => {
+                dropZone.removeEventListener('dragover', dragOverHandler);
+                dropZone.removeEventListener('dragleave', dragLeaveHandler);
+                dropZone.removeEventListener('drop', dropHandler);
+                
+                dropZone.addEventListener('dragover', dragOverHandler);
+                dropZone.addEventListener('dragleave', dragLeaveHandler);
+                dropZone.addEventListener('drop', dropHandler);
+            });
+        }
+        
+        function dragStartHandler(e) {
+            e.dataTransfer.setData('text/plain', this.getAttribute('data-value'));
+            this.classList.add('dragging');
+        }
+        
+        function dragEndHandler(e) {
+            this.classList.remove('dragging');
+        }
+        
+        function dragOverHandler(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        }
+        
+        function dragLeaveHandler(e) {
+            this.classList.remove('drag-over');
+        }
+        
+        function dropHandler(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            const value = e.dataTransfer.getData('text/plain');
+            const questionId = this.getAttribute('data-question-id');
+            
+            this.innerHTML = '';
+            this.style.border = '2px solid #4CAF50';
+            this.style.background = '#e8f5e9';
+            
+            const droppedItem = document.createElement('div');
+            droppedItem.className = 'dropped-item';
+            droppedItem.innerHTML = `
+                ${value}
+                <button class="remove-btn" onclick="removeAnswer(this, '${questionId}')">×</button>
+            `;
+            this.appendChild(droppedItem);
+            
+            userAnswers[questionId] = value;
+            document.getElementById(`answer_${questionId}`).value = value;
+            updateScore();
+        }
+        
+        function removeAnswer(btn, questionId) {
+            const dropZone = btn.closest('.drop-zone');
+            dropZone.innerHTML = '🎯 Drop your answer here';
+            dropZone.style.border = '2px dashed #aaa';
+            dropZone.style.background = '#f8f9fa';
+            delete userAnswers[questionId];
+            document.getElementById(`answer_${questionId}`).value = '';
+            updateScore();
+        }
+        
+        // ========== DRAG SORT FUNCTIONALITY ==========
+        function initializeDragSort(container) {
+            let dragSrc = null;
+            const items = container.querySelectorAll('.sort-item');
+            
+            items.forEach(item => {
+                item.removeEventListener('dragstart', sortDragStart);
+                item.removeEventListener('dragend', sortDragEnd);
+                item.removeEventListener('dragover', sortDragOver);
+                item.removeEventListener('dragleave', sortDragLeave);
+                item.removeEventListener('drop', sortDrop);
+                
+                item.addEventListener('dragstart', sortDragStart);
+                item.addEventListener('dragend', sortDragEnd);
+                item.addEventListener('dragover', sortDragOver);
+                item.addEventListener('dragleave', sortDragLeave);
+                item.addEventListener('drop', sortDrop);
+            });
+            
+            function sortDragStart(e) {
+                dragSrc = this;
+                e.dataTransfer.setData('text/plain', this.getAttribute('data-value'));
+                this.classList.add('dragging');
+            }
+            
+            function sortDragEnd(e) {
+                this.classList.remove('dragging');
+                dragSrc = null;
+            }
+            
+            function sortDragOver(e) {
+                e.preventDefault();
+                if (dragSrc !== this) {
+                    this.classList.add('drag-over');
+                }
+            }
+            
+            function sortDragLeave(e) {
+                this.classList.remove('drag-over');
+            }
+            
+            function sortDrop(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                if (dragSrc && dragSrc !== this) {
+                    const parent = container;
+                    const children = Array.from(parent.children);
+                    const dragIndex = children.indexOf(dragSrc);
+                    const dropIndex = children.indexOf(this);
+                    
+                    if (dragIndex < dropIndex) {
+                        this.parentNode.insertBefore(dragSrc, this.nextSibling);
+                    } else {
+                        this.parentNode.insertBefore(dragSrc, this);
+                    }
+                    
+                    updatePositionNumbers(container);
+                    saveSortOrder(container);
+                }
+            }
+        }
+        
+        function updatePositionNumbers(container) {
+            const items = container.querySelectorAll('.sort-item');
+            items.forEach((item, index) => {
+                const positionSpan = item.querySelector('.sort-position');
+                if (positionSpan) {
+                    positionSpan.textContent = index + 1;
+                }
+            });
+        }
+        
+        function saveSortOrder(container) {
+            const questionId = container.getAttribute('data-question-id');
+            const items = container.querySelectorAll('.sort-item');
+            const order = Array.from(items).map(item => item.getAttribute('data-value'));
+            
+            userAnswers[questionId] = order;
+            document.getElementById(`answer_${questionId}`).value = JSON.stringify(order);
+            updateScore();
+        }
+        
+        // Initialize all drag-sort containers
+        document.querySelectorAll('.sort-items-list').forEach(container => {
+            initializeDragSort(container);
+            container.addEventListener('dragover', (e) => e.preventDefault());
+        });
+        
+        // Initialize drag label
+        initializeDragLabel();
+        
+        // ========== SUBMIT QUIZ ==========
+        async function submitQuiz() {
+            const unanswered = [];
+            for (let i = 0; i < totalQuestions; i++) {
+                const qContainer = document.querySelectorAll('.question-container')[i];
+                if (qContainer) {
+                    const qId = qContainer.getAttribute('data-question-id');
+                    if (!userAnswers[qId] || userAnswers[qId] === '' || 
+                        (Array.isArray(userAnswers[qId]) && userAnswers[qId].length === 0)) {
+                        unanswered.push(i + 1);
+                    }
+                }
+            }
+            
+            if (unanswered.length > 0) {
+                if (!confirm(`You have ${unanswered.length} unanswered question(s) (${unanswered.join(', ')}). Submit anyway?`)) {
+                    return;
+                }
+            }
+            
+            const answers = [];
+            for (let qid in userAnswers) {
+                let answer = userAnswers[qid];
+                const qContainer = document.querySelector(`.question-container[data-question-id="${qid}"]`);
+                const qType = qContainer ? qContainer.getAttribute('data-question-type') : null;
+                
+                if (qType === 'drag_sort') {
+                    if (typeof answer === 'string') {
+                        try {
+                            answer = JSON.parse(answer);
+                        } catch(e) {
+                            answer = answer.split(',');
+                        }
+                    }
+                }
+                
+                answers.push({
+                    question_id: parseInt(qid),
+                    answer: answer,
+                    q_type: qType
+                });
+            }
+            
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ answers: answers })
+                });
+                
+                const results = await response.json();
+                displayResults(results);
+            } catch (error) {
+                console.error('Error submitting quiz:', error);
+                alert('There was an error submitting your quiz. Please try again.');
+            }
+        }
+        
+        function displayResults(results) {
+            const quizForm = document.getElementById('quiz-form');
+            const resultsDiv = document.getElementById('results');
+            
+            quizForm.style.display = 'none';
+            resultsDiv.style.display = 'block';
+            
+            let html = `
+                <div class="result-header">
+                    <h2>📊 Quiz Results</h2>
+                    <p>Score: ${results.score}/${results.total} (${results.percentage}%)</p>
+                    <p>${results.passed ? '✅ Congratulations! You passed!' : '❌ Keep practicing! You can try again.'}</p>
+                </div>
+                <h3 style="margin-bottom: 20px;">📝 Detailed Results:</h3>
+            `;
+            
+            results.results.forEach((result, index) => {
+                let correctAnswerDisplay = result.correct_answer;
+                let givenAnswerDisplay = result.given_answer || '(no answer)';
+                
+                if (result.q_type === 'drag_sort') {
+                    try {
+                        const correctArr = result.correct_answer.includes(',') ? 
+                            result.correct_answer.split(',') : JSON.parse(result.correct_answer);
+                        correctAnswerDisplay = correctArr.join(' → ');
+                    } catch(e) {}
+                    
+                    try {
+                        let givenArr = result.given_answer;
+                        if (givenArr && givenArr !== '(no answer)') {
+                            if (givenArr.includes(',')) givenArr = givenArr.split(',');
+                            else if (givenArr.startsWith('[')) givenArr = JSON.parse(givenArr);
+                            givenAnswerDisplay = Array.isArray(givenArr) ? givenArr.join(' → ') : givenArr;
+                        }
+                    } catch(e) {}
+                }
+                
+                html += `
+                    <div class="result-card ${result.correct ? 'correct' : 'incorrect'}">
+                        <p><strong>${result.correct ? '✅' : '❌'} Question ${index + 1}:</strong> ${result.prompt}</p>
+                        <p><strong>Your answer:</strong> ${givenAnswerDisplay}</p>
+                        ${!result.correct ? `<p><strong>Correct answer:</strong> ${correctAnswerDisplay}</p>` : ''}
+                        ${result.image_path ? `<img src="/static/${result.image_path}" style="max-width:200px; margin-top:10px; border-radius:8px;">` : ''}
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="action-buttons">
+                    <button class="btn-retake" onclick="location.reload()">🔄 Take Another Quiz</button>
+                    <button class="btn-leaderboard" onclick="window.location.href='/leaderboard'">🏆 View Leaderboard</button>
+                    <button class="btn-logout" onclick="window.location.href='/logout'">🚪 Logout</button>
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        // Prevent default drag on images
+        window.addEventListener('dragstart', function(e) {
+            if (!e.target.classList.contains('drag-option') && !e.target.classList.contains('sort-item')) {
+                e.preventDefault();
+            }
+        });
+        
+        console.log('Quiz initialized with', totalQuestions, 'questions');
+    </script>
+</body>
+</html>
