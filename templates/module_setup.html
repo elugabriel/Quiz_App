@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Setup - {{ topic }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: rgba(255,255,255,0.95);
+            padding: 15px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .navbar a {
+            color: #1a237e;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s;
+        }
+        
+        .navbar a:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .setup-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .module-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .module-header h1 {
+            color: #1a237e;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .module-header .breadcrumb {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1a237e;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        select, input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+        
+        .checkbox-group input {
+            width: auto;
+        }
+        
+        .difficulty-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .difficulty-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .difficulty-btn.selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .difficulty-btn.easy.selected { background: #4caf50; border-color: #4caf50; }
+        .difficulty-btn.medium.selected { background: #ff9800; border-color: #ff9800; }
+        .difficulty-btn.hard.selected { background: #f44336; border-color: #f44336; }
+        
+        .sample-questions {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .sample-question {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .sample-question:last-child {
+            border-bottom: none;
+        }
+        
+        .sample-type {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .sample-type.label { background: #2196f3; color: white; }
+        .sample-type.sort { background: #ff9800; color: white; }
+        .sample-type.tf { background: #4caf50; color: white; }
+        
+        .start-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 20px;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .back-btn {
+            background: #666;
+            margin-top: 10px;
+        }
+        
+        .back-btn:hover {
+            background: #555;
+        }
+        
+        @media (max-width: 768px) {
+            .setup-card {
+                padding: 20px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="{{ url_for('modules') }}">← Back to Modules</a>
+        <div>
+            👤 {{ student_name }}
+            <a href="{{ url_for('logout') }}" style="margin-left: 15px;">Logout</a>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="setup-card">
+            <div class="module-header">
+                <h1>📚 {{ topic }}</h1>
+                <div class="breadcrumb">
+                    Available Questions: {{ total_questions }}
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">{{ drag_label_count }}</div>
+                    <div class="stat-label">Labeling Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ drag_sort_count }}</div>
+                    <div class="stat-label">Sequencing Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ true_false_count }}</div>
+                    <div class="stat-label">True/False Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ easy_count }}</div>
+                    <div class="stat-label">Easy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ medium_count }}</div>
+                    <div class="stat-label">Medium</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ hard_count }}</div>
+                    <div class="stat-label">Hard</div>
+                </div>
+            </div>
+            
+            <form method="POST">
+                <div class="form-group">
+                    <label>📝 Number of Questions</label>
+                    <input type="number" name="num_questions" min="5" max="{{ total_questions }}" value="{{ [20, total_questions]|min }}" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>🎯 Question Types</label>
+                    <div class="checkbox-group">
+                        <label>
+                            <input type="checkbox" name="include_drag_label" {% if drag_label_count > 0 %}checked{% endif %}>
+                            🏷️ Labeling ({{ drag_label_count }})
+                        </label>
+                        <label>
+                            <input type="checkbox" name="include_drag_sort" {% if drag_sort_count > 0 %}checked{% endif %}>
+                            🔄 Sequencing ({{ drag_sort_count }})
+                        </label>
+                        <label>
+                            <input type="checkbox" name="include_true_false" {% if true_false_count > 0 %}checked{% endif %}>
+                            ✅ True/False ({{ true_false_count }})
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>⭐ Difficulty Level</label>
+                    <div class="difficulty-buttons">
+                        <div class="difficulty-btn selected" data-difficulty="all" onclick="selectDifficulty('all')">All Levels</div>
+                        <div class="difficulty-btn easy" data-difficulty="easy" onclick="selectDifficulty('easy')">Easy ({{ easy_count }})</div>
+                        <div class="difficulty-btn medium" data-difficulty="medium" onclick="selectDifficulty('medium')">Medium ({{ medium_count }})</div>
+                        <div class="difficulty-btn hard" data-difficulty="hard" onclick="selectDifficulty('hard')">Hard ({{ hard_count }})</div>
+                    </div>
+                    <input type="hidden" name="difficulty" id="difficulty" value="all">
+                </div>
+                
+                <button type="submit" class="start-btn">🚀 Start Quiz Now!</button>
+            </form>
+            
+            {% if sample_questions %}
+            <div class="sample-questions">
+                <h3>📖 Sample Questions</h3>
+                {% for q in sample_questions %}
+                <div class="sample-question">
+                    <span class="sample-type 
+                        {% if q.q_type == 'drag_label' %}label
+                        {% elif q.q_type == 'drag_sort' %}sort
+                        {% else %}tf{% endif %}">
+                        {{ q.q_type.replace('_', ' ').upper() }}
+                    </span>
+                    {{ q.prompt[:100] }}{% if q.prompt|length > 100 %}...{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        function selectDifficulty(diff) {
+            document.getElementById('difficulty').value = diff;
+            
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            document.querySelector(`.difficulty-btn[data-difficulty="${diff}"]`).classList.add('selected');
+        }
+    </script>
+</body>
+</html>

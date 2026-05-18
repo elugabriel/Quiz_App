@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Quiz - Module Based Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6fc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            padding: 15px 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: background 0.2s;
+            font-weight: 500;
+        }
+        
+        .navbar a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .user-info {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-weight: 500;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .quiz-header {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 14px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        
+        .quiz-header h2 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+        
+        .quiz-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .score-badge {
+            background: #ff9800;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+        
+        /* Module Navigation */
+        .module-navigation {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .module-tab {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+        }
+        
+        .module-tab.active {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .module-tab:hover:not(.active) {
+            transform: translateY(-2px);
+            border-color: #1a237e;
+        }
+        
+        .module-badge {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .module-tab.active .module-badge {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* Module Section */
+        .module-section {
+            background: white;
+            border-radius: 14px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+        
+        .module-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .module-header h3 {
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .module-progress {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+        
+        .module-questions {
+            padding: 20px;
+        }
+        
+        .question-container {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.2s;
+            border-left: 4px solid #667eea;
+        }
+        
+        .question-container:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .question-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 15px;
+        }
+        
+        .question-image {
+            max-width: 100%;
+            max-height: 200px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+        
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+        }
+        
+        .drag-option {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: grab;
+            user-select: none;
+            transition: all 0.2s;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .drag-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .drag-option:active {
+            cursor: grabbing;
+        }
+        
+        .drop-zone {
+            background: #f8f9fa;
+            border: 2px dashed #aaa;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            transition: all 0.2s;
+            color: #666;
+        }
+        
+        .drop-zone.drag-over {
+            border-color: #4CAF50;
+            background: #e8f5e9;
+        }
+        
+        .dropped-item {
+            background: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 500;
+        }
+        
+        .remove-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sort-container {
+            margin: 20px 0;
+        }
+        
+        .sort-instruction {
+            background: #e3f2fd;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            color: #1a237e;
+            font-size: 14px;
+        }
+        
+        .sort-items-list {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+        }
+        
+        .sort-item {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 10px;
+            cursor: grab;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .sort-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .sort-handle {
+            cursor: grab;
+            font-size: 18px;
+            margin-right: 12px;
+        }
+        
+        .sort-position {
+            background: rgba(0,0,0,0.3);
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, #4caf50, #45a049);
+            color: white;
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .result-card {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        }
+        
+        .result-card.correct {
+            border-left: 5px solid #28a745;
+            background: #f0fff4;
+        }
+        
+        .result-card.incorrect {
+            border-left: 5px solid #dc3545;
+            background: #fff5f5;
+        }
+        
+        .result-header {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .action-buttons button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .btn-retake { background: #4CAF50; color: white; }
+        .btn-modules { background: #1a237e; color: white; }
+        .btn-leaderboard { background: #ff9800; color: white; }
+        .btn-logout { background: #666; color: white; }
+        
+        .progress-footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a237e;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        
+        .collapse-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+        
+        .module-section.collapsed .module-questions {
+            display: none;
+        }
+        
+        .module-section.collapsed .collapse-icon {
+            transform: rotate(-90deg);
+        }
+        
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            .navbar { flex-direction: column; text-align: center; }
+            .module-tab { padding: 8px 16px; font-size: 12px; }
+            .question-container { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-links">
+            <a href="{{ url_for('quiz') }}">📝 Take Quiz</a>
+            <a href="{{ url_for('leaderboard') }}">🏆 Leaderboard</a>
+            <a href="{{ url_for('logout') }}">🚪 Logout</a>
+        </div>
+        <div class="user-info">
+            👤 {{ student_name }}
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="quiz-header">
+            <h2>📝 Computer Hardware & Phone Repair Quiz</h2>
+            <p>Complete all {{ total_questions }} questions across both modules</p>
+            <div class="quiz-info">
+                <span>👤 <strong>{{ student_name }}</strong></span>
+                <span class="score-badge">✅ Answered: <span id="current-score">0</span>/<span id="total-questions">{{ total_questions }}</span></span>
+            </div>
+        </div>
+        
+        <!-- Module Navigation Tabs -->
+        <!-- <div class="module-navigation">
+            {% for module in modules %}
+            <div class="module-tab" data-module="{{ loop.index0 }}">
+                {{ module.icon }} {{ module.name }}
+                <span class="module-badge">{{ module.question_count }} questions</span>
+            </div>
+            {% endfor %}
+        </div> -->
+        
+        <form id="quiz-form">
+            {% for module in modules %}
+            <div class="module-section" data-module-index="{{ loop.index0 }}">
+                <div class="module-header" onclick="toggleModule(this)">
+                    <h3>
+                        <span class="collapse-icon">▼</span>
+                        {{ module.icon }} {{ module.name }}
+                    </h3>
+                    <div class="module-progress">
+                        <span class="module-answered-{{ loop.index0 }}">0</span>/{{ module.question_count }} answered
+                    </div>
+                </div>
+                <div class="module-questions">
+                    {% set outer_index = loop.index0 %}
+                    {% for q in module.questions %}
+                    <div class="question-container" data-question-id="{{ q.id }}" data-question-type="{{ q.q_type }}" data-module="{{ outer_index }}">
+                        <div class="question-title">
+                            Q{{ loop.index }}: {{ q.prompt }}
+                        </div>
+                        
+                        {% if q.image_path %}
+                        <img src="{{ url_for('static', filename=q.image_path) }}" class="question-image" alt="Question image">
+                        {% endif %}
+                        
+                        {% if q.q_type == 'drag_label' %}
+                        <div class="drag-label-container">
+                            <div class="options-container">
+                                {% for option in q.options %}
+                                <div class="drag-option" draggable="true" data-value="{{ option }}">{{ option }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="drop-zone" data-question-id="{{ q.id }}">
+                                🎯 Drag and drop the correct answer here
+                            </div>
+                            <input type="hidden" name="answer_{{ q.id }}" id="answer_{{ q.id }}" value="">
+                        </div>
+                        {% endif %}
+                        
+                        {% if q.q_type == 'drag_sort' %}
+                        <div class="sort-container">
+                            <div class="sort-instruction">
+                                🔄 Arrange in correct order (drag to reorder)
+                            </div>
+                            <div class="sort-items-list" data-question-id="{{ q.id }}">
+                                {% for option in q.options %}
+                                <div class="sort-item" draggable="true" data-value="{{ option }}">
+                                    <span>
+                                        <span class="sort-handle">⋮⋮</span>
+                                        {{ option }}
+                                    </span>
+                                    <span class="sort-position">{{ loop.index }}</span>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <input type="hidden" name="answer_{{ q.id }}" id="answer_{{ q.id }}" value="">
+                        </div>
+                        {% endif %}
+                        
+                        {% if q.q_type == 'true_false' %}
+                        <div class="drag-label-container">
+                            <div class="options-container">
+                                {% for option in q.options %}
+                                <div class="drag-option" draggable="true" data-value="{{ option }}">{{ option }}</div>
+                                {% endfor %}
+                            </div>
+                            <div class="drop-zone" data-question-id="{{ q.id }}">
+                                🎯 Drop your answer here
+                            </div>
+                            <input type="hidden" name="answer_{{ q.id }}" id="answer_{{ q.id }}" value="">
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            
+            <button type="button" class="submit-btn" onclick="submitQuiz()">📤 Submit Quiz</button>
+        </form>
+        
+        <div id="results" style="display: none;"></div>
+    </div>
+    
+    <div class="progress-footer" id="progress-indicator">
+        📊 Total Progress: 0%
+    </div>
+    
+    <script>
+        let totalQuestions = {{ total_questions }};
+        let userAnswers = {};
+        let moduleQuestionCounts = [{% for module in modules %}{{ module.question_count }}{% if not loop.last %},{% endif %}{% endfor %}];
+        let moduleAnsweredCounts = new Array(moduleQuestionCounts.length).fill(0);
+        
+        function updateScore() {
+            let answeredCount = 0;
+            for (let qid in userAnswers) {
+                if (userAnswers[qid] && userAnswers[qid] !== '' && 
+                    (!Array.isArray(userAnswers[qid]) || userAnswers[qid].length > 0)) {
+                    answeredCount++;
+                }
+            }
+            document.getElementById('current-score').textContent = answeredCount;
+            
+            // Update module progress
+            moduleAnsweredCounts.fill(0);
+            for (let qid in userAnswers) {
+                if (userAnswers[qid] && userAnswers[qid] !== '') {
+                    const questionDiv = document.querySelector(`.question-container[data-question-id="${qid}"]`);
+                    if (questionDiv) {
+                        const moduleIndex = parseInt(questionDiv.getAttribute('data-module'));
+                        if (!isNaN(moduleIndex)) {
+                            moduleAnsweredCounts[moduleIndex]++;
+                        }
+                    }
+                }
+            }
+            
+            for (let i = 0; i < moduleQuestionCounts.length; i++) {
+                const progressSpan = document.querySelector(`.module-answered-${i}`);
+                if (progressSpan) {
+                    progressSpan.textContent = moduleAnsweredCounts[i];
+                }
+            }
+            
+            updateProgressIndicator(answeredCount);
+        }
+        
+        function updateProgressIndicator(answeredCount) {
+            const percentage = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
+            document.getElementById('progress-indicator').textContent = `📊 Total Progress: ${percentage}%`;
+        }
+        
+        // Module navigation
+        document.querySelectorAll('.module-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const moduleIndex = parseInt(this.getAttribute('data-module'));
+                const moduleSection = document.querySelector(`.module-section[data-module-index="${moduleIndex}"]`);
+                if (moduleSection) {
+                    moduleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                
+                // Highlight active tab
+                document.querySelectorAll('.module-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        function toggleModule(header) {
+            const section = header.closest('.module-section');
+            section.classList.toggle('collapsed');
+        }
+        
+        // Drag and drop functionality
+        function initializeDragLabel() {
+            document.querySelectorAll('.drag-option').forEach(dragElement => {
+                dragElement.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', this.getAttribute('data-value'));
+                    this.classList.add('dragging');
+                });
+                dragElement.addEventListener('dragend', function(e) {
+                    this.classList.remove('dragging');
+                });
+            });
+            
+            document.querySelectorAll('.drop-zone').forEach(dropZone => {
+                dropZone.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('drag-over');
+                });
+                dropZone.addEventListener('dragleave', function(e) {
+                    this.classList.remove('drag-over');
+                });
+                dropZone.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('drag-over');
+                    
+                    const value = e.dataTransfer.getData('text/plain');
+                    const questionId = this.getAttribute('data-question-id');
+                    
+                    this.innerHTML = '';
+                    this.style.border = '2px solid #4CAF50';
+                    this.style.background = '#e8f5e9';
+                    
+                    const droppedItem = document.createElement('div');
+                    droppedItem.className = 'dropped-item';
+                    droppedItem.innerHTML = `
+                        ${value}
+                        <button class="remove-btn" onclick="removeAnswer(this, '${questionId}')">×</button>
+                    `;
+                    this.appendChild(droppedItem);
+                    
+                    userAnswers[questionId] = value;
+                    document.getElementById(`answer_${questionId}`).value = value;
+                    updateScore();
+                });
+            });
+        }
+        
+        function removeAnswer(btn, questionId) {
+            const dropZone = btn.closest('.drop-zone');
+            dropZone.innerHTML = '🎯 Drag and drop the correct answer here';
+            dropZone.style.border = '2px dashed #aaa';
+            dropZone.style.background = '#f8f9fa';
+            delete userAnswers[questionId];
+            document.getElementById(`answer_${questionId}`).value = '';
+            updateScore();
+        }
+        
+        function initializeDragSort() {
+            document.querySelectorAll('.sort-items-list').forEach(container => {
+                let dragSrc = null;
+                
+                function updatePositionNumbers() {
+                    const items = container.querySelectorAll('.sort-item');
+                    items.forEach((item, idx) => {
+                        const positionSpan = item.querySelector('.sort-position');
+                        if (positionSpan) positionSpan.textContent = idx + 1;
+                    });
+                }
+                
+                function saveSortOrder() {
+                    const questionId = container.getAttribute('data-question-id');
+                    const items = container.querySelectorAll('.sort-item');
+                    const order = Array.from(items).map(item => item.getAttribute('data-value'));
+                    userAnswers[questionId] = order;
+                    document.getElementById(`answer_${questionId}`).value = JSON.stringify(order);
+                    updateScore();
+                }
+                
+                container.querySelectorAll('.sort-item').forEach(item => {
+                    item.setAttribute('draggable', 'true');
+                    
+                    item.addEventListener('dragstart', function(e) {
+                        dragSrc = this;
+                        e.dataTransfer.setData('text/plain', this.getAttribute('data-value'));
+                        this.classList.add('dragging');
+                    });
+                    
+                    item.addEventListener('dragend', function(e) {
+                        this.classList.remove('dragging');
+                        dragSrc = null;
+                    });
+                    
+                    item.addEventListener('dragover', function(e) {
+                        e.preventDefault();
+                        if (dragSrc !== this) {
+                            this.classList.add('drag-over');
+                        }
+                    });
+                    
+                    item.addEventListener('dragleave', function(e) {
+                        this.classList.remove('drag-over');
+                    });
+                    
+                    item.addEventListener('drop', function(e) {
+                        e.preventDefault();
+                        this.classList.remove('drag-over');
+                        
+                        if (dragSrc && dragSrc !== this) {
+                            const children = Array.from(container.children);
+                            const dragIndex = children.indexOf(dragSrc);
+                            const dropIndex = children.indexOf(this);
+                            
+                            if (dragIndex < dropIndex) {
+                                container.insertBefore(dragSrc, this.nextSibling);
+                            } else {
+                                container.insertBefore(dragSrc, this);
+                            }
+                            
+                            updatePositionNumbers();
+                            saveSortOrder();
+                        }
+                    });
+                });
+                
+                updatePositionNumbers();
+            });
+        }
+        
+        initializeDragLabel();
+        initializeDragSort();
+        updateScore();
+        
+        async function submitQuiz() {
+            const unanswered = [];
+            for (let i = 0; i < totalQuestions; i++) {
+                const qContainer = document.querySelectorAll('.question-container')[i];
+                if (qContainer) {
+                    const qId = qContainer.getAttribute('data-question-id');
+                    if (!userAnswers[qId] || userAnswers[qId] === '' || 
+                        (Array.isArray(userAnswers[qId]) && userAnswers[qId].length === 0)) {
+                        unanswered.push(i + 1);
+                    }
+                }
+            }
+            
+            if (Object.keys(userAnswers).length < totalQuestions) {
+                if (!confirm(`You have ${totalQuestions - Object.keys(userAnswers).length} unanswered question(s). Submit anyway?`)) {
+                    return;
+                }
+            }
+            
+            const answers = [];
+            for (let qid in userAnswers) {
+                let answer = userAnswers[qid];
+                const qContainer = document.querySelector(`.question-container[data-question-id="${qid}"]`);
+                const qType = qContainer ? qContainer.getAttribute('data-question-type') : null;
+                
+                if (qType === 'drag_sort' && typeof answer === 'string') {
+                    try {
+                        answer = JSON.parse(answer);
+                    } catch(e) {
+                        answer = answer.split(',');
+                    }
+                }
+                
+                answers.push({
+                    question_id: parseInt(qid),
+                    answer: answer,
+                    q_type: qType
+                });
+            }
+            
+            try {
+                const response = await fetch('/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ answers: answers })
+                });
+                
+                const results = await response.json();
+                displayResults(results);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error submitting quiz. Please try again.');
+            }
+        }
+        
+        function displayResults(results) {
+            const quizForm = document.getElementById('quiz-form');
+            const resultsDiv = document.getElementById('results');
+            
+            quizForm.style.display = 'none';
+            resultsDiv.style.display = 'block';
+            
+            let html = `
+                <div class="result-header">
+                    <h2>📊 Quiz Results</h2>
+                    <p>Score: ${results.score}/${results.total} (${results.percentage}%)</p>
+                    <p>${results.passed ? '✅ Congratulations! You passed!' : '❌ Keep practicing! You can try again.'}</p>
+                </div>
+                <h3>📝 Detailed Results:</h3>
+            `;
+            
+            results.results.forEach((result, index) => {
+                let correctAnswerDisplay = result.correct_answer;
+                let givenAnswerDisplay = result.given_answer || '(no answer)';
+                
+                if (result.q_type === 'drag_sort') {
+                    try {
+                        const correctArr = result.correct_answer.includes(',') ? 
+                            result.correct_answer.split(',') : JSON.parse(result.correct_answer);
+                        correctAnswerDisplay = correctArr.join(' → ');
+                    } catch(e) {}
+                    
+                    try {
+                        let givenArr = result.given_answer;
+                        if (givenArr && givenArr !== '(no answer)') {
+                            if (givenArr.includes(',')) givenArr = givenArr.split(',');
+                            else if (givenArr.startsWith('[')) givenArr = JSON.parse(givenArr);
+                            givenAnswerDisplay = Array.isArray(givenArr) ? givenArr.join(' → ') : givenArr;
+                        }
+                    } catch(e) {}
+                }
+                
+                html += `
+                    <div class="result-card ${result.correct ? 'correct' : 'incorrect'}">
+                        <p><strong>${result.correct ? '✅' : '❌'} Question ${index + 1}:</strong> ${result.prompt}</p>
+                        <p><strong>Your answer:</strong> ${givenAnswerDisplay}</p>
+                        ${!result.correct ? `<p><strong>Correct answer:</strong> ${correctAnswerDisplay}</p>` : ''}
+                        ${result.image_path ? `<img src="/static/${result.image_path}" style="max-width:200px; margin-top:10px; border-radius:8px;">` : ''}
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="action-buttons">
+                    <button class="btn-retake" onclick="location.reload()">🔄 Retake Quiz</button>
+                    <button class="btn-leaderboard" onclick="window.location.href='/leaderboard'">🏆 Leaderboard</button>
+                    <button class="btn-logout" onclick="window.location.href='/logout'">🚪 Logout</button>
+                </div>
+            `;
+            
+            resultsDiv.innerHTML = html;
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

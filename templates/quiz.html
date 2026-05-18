@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Computer Quiz - Interactive Assessment Platform</title>
+    <title>Quiz - Hardware & Phone Repair</title>
     <style>
         * {
             margin: 0;
@@ -14,20 +14,18 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #f4f6fc;
-            min-height: 100vh;
             padding: 20px;
         }
         
-        /* Navbar styling matching your platform */
         .navbar {
             background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
             padding: 15px 30px;
             border-radius: 12px;
             margin-bottom: 30px;
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+            justify-content: space-between;
+            align-items: center;
+            color: white;
         }
         
         .navbar a {
@@ -35,40 +33,14 @@
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 8px;
-            transition: background 0.2s;
-            font-weight: 500;
-        }
-        
-        .navbar a:hover {
             background: rgba(255,255,255,0.2);
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
         }
         
-        /* Flash messages */
-        .flash {
-            padding: 12px 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-        
-        .flash.success {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-            color: #155724;
-        }
-        
-        .flash.error {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            color: #721c24;
-        }
-        
-        /* Quiz Header */
         .quiz-header {
             background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
             color: white;
@@ -76,28 +48,21 @@
             border-radius: 14px;
             margin-bottom: 30px;
             text-align: center;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
         }
         
-        .quiz-header h2 {
-            margin: 0 0 10px 0;
+        .quiz-header h1 {
             font-size: 28px;
-        }
-        
-        .quiz-header p {
-            opacity: 0.9;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
         
         .quiz-info {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px solid rgba(255,255,255,0.3);
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 10px;
         }
         
         .score-badge {
@@ -107,41 +72,65 @@
             font-weight: bold;
         }
         
-        /* Question Container */
-        .question-container {
+        /* Module Section Styles */
+        .module-section {
             background: white;
-            border-radius: 14px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-            transition: transform 0.2s;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            overflow: hidden;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
         }
         
-        .question-container:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        .module-header {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 20px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .module-header h2 {
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .module-progress {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+        }
+        
+        .module-questions {
+            padding: 25px;
+        }
+        
+        /* Question Styles */
+        .question-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #667eea;
         }
         
         .question-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: #1a237e;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 15px;
         }
         
         .question-image {
             max-width: 100%;
-            max-height: 250px;
+            max-height: 180px;
             margin: 15px 0;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        
-        /* Drag Label Styles */
-        .drag-label-container {
-            margin: 20px 0;
         }
         
         .options-container {
@@ -149,10 +138,9 @@
             flex-wrap: wrap;
             gap: 12px;
             margin: 15px 0;
-            padding: 20px;
-            background: #f5f5f5;
+            padding: 15px;
+            background: white;
             border-radius: 12px;
-            min-height: 80px;
         }
         
         .drag-option {
@@ -163,39 +151,30 @@
             cursor: grab;
             user-select: none;
             display: inline-block;
-            transition: all 0.2s;
-            font-weight: 500;
+            transition: transform 0.2s;
             font-size: 14px;
         }
         
         .drag-option:hover {
             transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            background: linear-gradient(135deg, #3949ab 0%, #5c6bc0 100%);
         }
         
         .drag-option:active {
             cursor: grabbing;
         }
         
-        .drag-option.dragging {
-            opacity: 0.5;
-        }
-        
         .drop-zone {
             background: #f8f9fa;
             border: 2px dashed #aaa;
             border-radius: 12px;
-            padding: 20px;
-            margin: 15px 0;
-            min-height: 80px;
+            padding: 15px;
+            margin: 10px 0;
+            min-height: 70px;
             display: flex;
             align-items: center;
             gap: 12px;
             flex-wrap: wrap;
-            transition: all 0.2s;
             color: #666;
-            font-size: 14px;
         }
         
         .drop-zone.drag-over {
@@ -211,7 +190,6 @@
             display: inline-flex;
             align-items: center;
             gap: 10px;
-            font-weight: 500;
         }
         
         .remove-btn {
@@ -223,19 +201,6 @@
             height: 22px;
             cursor: pointer;
             font-size: 12px;
-            line-height: 1;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .remove-btn:hover {
-            background: #d32f2f;
-        }
-        
-        /* Drag Sort Styles */
-        .sort-container {
-            margin: 20px 0;
         }
         
         .sort-instruction {
@@ -248,10 +213,9 @@
         }
         
         .sort-items-list {
-            background: #f5f5f5;
+            background: white;
             padding: 15px;
             border-radius: 12px;
-            min-height: 200px;
         }
         
         .sort-item {
@@ -264,32 +228,16 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.2s;
         }
         
         .sort-item:hover {
             transform: translateX(5px);
-            background: linear-gradient(135deg, #3949ab 0%, #5c6bc0 100%);
-        }
-        
-        .sort-item:active {
-            cursor: grabbing;
-        }
-        
-        .sort-item.dragging {
-            opacity: 0.5;
-        }
-        
-        .sort-item.drag-over {
-            border-top: 3px solid #ff9800;
-            margin-top: -3px;
         }
         
         .sort-handle {
             cursor: grab;
             font-size: 18px;
             margin-right: 12px;
-            opacity: 0.7;
         }
         
         .sort-position {
@@ -297,37 +245,41 @@
             padding: 4px 10px;
             border-radius: 50px;
             font-size: 12px;
-            font-weight: bold;
         }
         
-        /* Submit Button */
         .submit-btn {
-            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            background: linear-gradient(135deg, #4caf50, #45a049);
             color: white;
-            padding: 14px 28px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
+            border-radius: 12px;
+            font-size: 18px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 20px;
             width: 100%;
-            transition: all 0.2s;
+            margin-top: 20px;
+            transition: transform 0.2s;
         }
         
         .submit-btn:hover {
-            background: linear-gradient(135deg, #3949ab 0%, #5c6bc0 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         
         /* Results Styles */
+        .result-header {
+            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 14px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
         .result-card {
-            margin: 20px 0;
-            padding: 20px;
-            border-radius: 12px;
             background: white;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
         }
         
         .result-card.correct {
@@ -340,19 +292,10 @@
             background: #fff5f5;
         }
         
-        .result-header {
-            background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
         .action-buttons {
             display: flex;
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
         
@@ -363,30 +306,12 @@
             border-radius: 10px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s;
         }
         
-        .btn-retake {
-            background: #4CAF50;
-            color: white;
-        }
+        .btn-retake { background: #4CAF50; color: white; }
+        .btn-leaderboard { background: #ff9800; color: white; }
+        .btn-logout { background: #666; color: white; }
         
-        .btn-leaderboard {
-            background: #ff9800;
-            color: white;
-        }
-        
-        .btn-logout {
-            background: #666;
-            color: white;
-        }
-        
-        .action-buttons button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        
-        /* Progress Footer */
         .progress-footer {
             position: fixed;
             bottom: 20px;
@@ -397,141 +322,90 @@
             border-radius: 50px;
             font-size: 14px;
             font-weight: bold;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            z-index: 1000;
         }
         
-        /* Responsive */
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .navbar {
-                padding: 10px 15px;
-            }
-            
-            .navbar a {
-                padding: 6px 12px;
-                font-size: 14px;
-            }
-            
-            .quiz-header {
-                padding: 20px;
-            }
-            
-            .quiz-header h2 {
-                font-size: 22px;
-            }
-            
-            .question-container {
-                padding: 15px;
-            }
-            
-            .drag-option {
-                padding: 6px 14px;
-                font-size: 12px;
-            }
-            
-            .sort-item {
-                padding: 10px 12px;
-                font-size: 13px;
-            }
-            
-            .progress-footer {
-                bottom: 10px;
-                right: 10px;
-                font-size: 11px;
-                padding: 8px 15px;
-            }
+            body { padding: 10px; }
+            .navbar { flex-direction: column; text-align: center; }
+            .module-header { flex-direction: column; text-align: center; }
+            .drag-option { padding: 6px 12px; font-size: 12px; }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar - Fixed to work with your routes -->
     <div class="navbar">
-        <a href="{{ url_for('login') }}">Home</a>
-        {% if session.get('student_id') %}
-            <a href="{{ url_for('quiz') }}">Quiz</a>
-            <a href="{{ url_for('leaderboard') }}">Leaderboard</a>
+        <span>📝 Quiz Platform</span>
+        <div>
+            👤 {{ student_name }}
             <a href="{{ url_for('logout') }}">Logout</a>
-        {% elif session.get('admin_id') %}
-            <a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
-            <a href="{{ url_for('admin_logout') }}">Logout</a>
-        {% else %}
-            <a href="{{ url_for('login') }}">Student Login</a>
-            <a href="{{ url_for('admin_login') }}">Admin Login</a>
-            <a href="{{ url_for('register') }}">Register</a>
-        {% endif %}
+        </div>
     </div>
     
     <div class="container">
-        <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, msg in messages %}
-                    <div class="flash {{ category }}">{{ msg }}</div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        
-        <!-- Quiz Content -->
         <div class="quiz-header">
-            <h2>📝 Computer Hardware & Phone repairs Quiz</h2>
-            <p>Test your knowledge </p>
+            <h1>📚 Computer Hardware & Phone Repair Quiz</h1>
+            <p>Complete both modules to test your knowledge</p>
             <div class="quiz-info">
-                <span>👤 <strong>{{ student_name }}</strong></span>
+                <span>👤 Student: {{ student_name }}</span>
                 <span class="score-badge">✅ Answered: <span id="current-score">0</span>/<span id="total-questions">{{ total_questions }}</span></span>
             </div>
         </div>
         
         <form id="quiz-form">
-            {% for q in questions %}
-            <div class="question-container" data-question-id="{{ q.id }}" data-question-type="{{ q.q_type }}">
-                <div class="question-title">
-                    Question {{ loop.index }}: {{ q.prompt }}
+            {% for module in modules %}
+            <div class="module-section" data-module-index="{{ loop.index0 }}">
+                <div class="module-header">
+                    <h2>
+                        {{ module.icon }} {{ module.name }}
+                    </h2>
+                    <div class="module-progress">
+                        📊 Progress: <span class="module-answered-{{ loop.index0 }}">0</span>/{{ module.count }}
+                    </div>
                 </div>
-                
-                {% if q.image_path %}
-                <img src="{{ url_for('static', filename=q.image_path) }}" class="question-image" alt="Question image">
-                {% endif %}
-                
-                <!-- Drag Label Interface -->
-                {% if q.q_type == 'drag_label' %}
-                <div class="drag-label-container">
-                    <div class="options-container">
-                        {% for option in q.options %}
-                        <div class="drag-option" draggable="true" data-value="{{ option }}">{{ option }}</div>
-                        {% endfor %}
-                    </div>
-                    <div class="drop-zone" data-question-id="{{ q.id }}">
-                        🎯 Drop your answer here
-                    </div>
-                    <input type="hidden" name="answer_{{ q.id }}" id="answer_{{ q.id }}" value="">
-                </div>
-                {% endif %}
-                
-                <!-- Drag Sort Interface -->
-                {% if q.q_type == 'drag_sort' %}
-                <div class="sort-container">
-                    <div class="sort-instruction">
-                        🔄 Drag and drop items to arrange them in the correct order (top = first, bottom = last)
-                    </div>
-                    <div class="sort-items-list" data-question-id="{{ q.id }}">
-                        {% set options = q.options|sort %}
-                        {% for option in options %}
-                        <div class="sort-item" draggable="true" data-value="{{ option }}">
-                            <span>
-                                <span class="sort-handle">⋮⋮</span>
-                                {{ option }}
-                            </span>
-                            <span class="sort-position">{{ loop.index }}</span>
+                <div class="module-questions">
+                    {% set outer_idx = loop.index0 %}
+                    {% for q in module.questions %}
+                    <div class="question-card" data-question-id="{{ q.id }}" data-question-type="{{ q.q_type }}" data-module="{{ outer_idx }}" data-question-index="{{ loop.index0 }}">
+                        <div class="question-title">
+                            Q{{ loop.index }}: {{ q.prompt }}
                         </div>
-                        {% endfor %}
+                        
+                        {% if q.image_path %}
+                        <img src="{{ url_for('static', filename=q.image_path) }}" class="question-image" alt="Question image" onerror="this.style.display='none'">
+                        {% endif %}
+                        
+                        {% if q.q_type == 'drag_label' %}
+                        <div class="options-container">
+                            {% for option in q.options %}
+                            <div class="drag-option" draggable="true" data-value="{{ option }}">{{ option }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="drop-zone" data-question-id="{{ q.id }}">
+                            🎯 Drop your answer here
+                        </div>
+                        <input type="hidden" name="answer_{{ q.id }}" id="answer_{{ q.id }}" value="">
+                        {% endif %}
+                        
+                        {% if q.q_type == 'drag_sort' %}
+                        <div class="sort-instruction">
+                            🔄 Drag and drop items into the correct order (top = first, bottom = last)
+                        </div>
+                        <div class="sort-items-list" data-question-id="{{ q.id }}">
+                            {% for option in q.options %}
+                            <div class="sort-item" draggable="true" data-value="{{ option }}">
+                                <span>
+                                    <span class="sort-handle">⋮⋮</span>
+                                    {{ option }}
+                                </span>
+                                <span class="sort-position">{{ loop.index }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="answer_{{ q.id }}" id="answer_{{ q.id }}" value="">
+                        {% endif %}
                     </div>
-                    <input type="hidden" name="answer_{{ q.id }}" id="answer_{{ q.id }}" value="">
+                    {% endfor %}
                 </div>
-                {% endif %}
             </div>
             {% endfor %}
             
@@ -541,328 +415,187 @@
         <div id="results" style="display: none;"></div>
     </div>
     
-    <div class="progress-footer" id="progress-indicator">
-        📊 Progress: 0%
-    </div>
+    <div class="progress-footer" id="progress-indicator">📊 Total Progress: 0%</div>
     
     <script>
-        // ========== INITIALIZATION ==========
         let totalQuestions = {{ total_questions }};
         let userAnswers = {};
-        let answeredCount = 0;
-        
-        // Set total questions display
-        document.getElementById('total-questions').textContent = totalQuestions;
-        document.getElementById('current-score').textContent = '0';
-        updateProgressIndicator();
+        let moduleCounts = [{% for m in modules %}{{ m.count }}{% if not loop.last %},{% endif %}{% endfor %}];
+        let moduleAnswered = [0, 0];
         
         function updateScore() {
-            answeredCount = 0;
-            for (let qid in userAnswers) {
-                if (userAnswers[qid] && userAnswers[qid] !== '' && 
-                    (!Array.isArray(userAnswers[qid]) || userAnswers[qid].length > 0)) {
-                    answeredCount++;
-                }
-            }
+            let answeredCount = Object.keys(userAnswers).filter(qid => userAnswers[qid] && userAnswers[qid] !== '').length;
             document.getElementById('current-score').textContent = answeredCount;
-            updateProgressIndicator();
-        }
-        
-        function updateProgressIndicator() {
-            const percentage = Math.round((answeredCount / totalQuestions) * 100);
-            document.getElementById('progress-indicator').textContent = `📊 Progress: ${percentage}%`;
-        }
-        
-        // ========== DRAG LABEL FUNCTIONALITY ==========
-        function initializeDragLabel() {
-            document.querySelectorAll('.drag-option').forEach(dragElement => {
-                dragElement.removeEventListener('dragstart', dragStartHandler);
-                dragElement.removeEventListener('dragend', dragEndHandler);
-                
-                dragElement.addEventListener('dragstart', dragStartHandler);
-                dragElement.addEventListener('dragend', dragEndHandler);
-            });
+            let percentage = totalQuestions > 0 ? Math.round((answeredCount / totalQuestions) * 100) : 0;
+            document.getElementById('progress-indicator').textContent = `📊 Total Progress: ${percentage}%`;
             
-            document.querySelectorAll('.drop-zone').forEach(dropZone => {
-                dropZone.removeEventListener('dragover', dragOverHandler);
-                dropZone.removeEventListener('dragleave', dragLeaveHandler);
-                dropZone.removeEventListener('drop', dropHandler);
-                
-                dropZone.addEventListener('dragover', dragOverHandler);
-                dropZone.addEventListener('dragleave', dragLeaveHandler);
-                dropZone.addEventListener('drop', dropHandler);
-            });
-        }
-        
-        function dragStartHandler(e) {
-            e.dataTransfer.setData('text/plain', this.getAttribute('data-value'));
-            this.classList.add('dragging');
-        }
-        
-        function dragEndHandler(e) {
-            this.classList.remove('dragging');
-        }
-        
-        function dragOverHandler(e) {
-            e.preventDefault();
-            this.classList.add('drag-over');
-        }
-        
-        function dragLeaveHandler(e) {
-            this.classList.remove('drag-over');
-        }
-        
-        function dropHandler(e) {
-            e.preventDefault();
-            this.classList.remove('drag-over');
-            
-            const value = e.dataTransfer.getData('text/plain');
-            const questionId = this.getAttribute('data-question-id');
-            
-            this.innerHTML = '';
-            this.style.border = '2px solid #4CAF50';
-            this.style.background = '#e8f5e9';
-            
-            const droppedItem = document.createElement('div');
-            droppedItem.className = 'dropped-item';
-            droppedItem.innerHTML = `
-                ${value}
-                <button class="remove-btn" onclick="removeAnswer(this, '${questionId}')">×</button>
-            `;
-            this.appendChild(droppedItem);
-            
-            userAnswers[questionId] = value;
-            document.getElementById(`answer_${questionId}`).value = value;
-            updateScore();
-        }
-        
-        function removeAnswer(btn, questionId) {
-            const dropZone = btn.closest('.drop-zone');
-            dropZone.innerHTML = '🎯 Drop your answer here';
-            dropZone.style.border = '2px dashed #aaa';
-            dropZone.style.background = '#f8f9fa';
-            delete userAnswers[questionId];
-            document.getElementById(`answer_${questionId}`).value = '';
-            updateScore();
-        }
-        
-        // ========== DRAG SORT FUNCTIONALITY ==========
-        function initializeDragSort(container) {
-            let dragSrc = null;
-            const items = container.querySelectorAll('.sort-item');
-            
-            items.forEach(item => {
-                item.removeEventListener('dragstart', sortDragStart);
-                item.removeEventListener('dragend', sortDragEnd);
-                item.removeEventListener('dragover', sortDragOver);
-                item.removeEventListener('dragleave', sortDragLeave);
-                item.removeEventListener('drop', sortDrop);
-                
-                item.addEventListener('dragstart', sortDragStart);
-                item.addEventListener('dragend', sortDragEnd);
-                item.addEventListener('dragover', sortDragOver);
-                item.addEventListener('dragleave', sortDragLeave);
-                item.addEventListener('drop', sortDrop);
-            });
-            
-            function sortDragStart(e) {
-                dragSrc = this;
-                e.dataTransfer.setData('text/plain', this.getAttribute('data-value'));
-                this.classList.add('dragging');
-            }
-            
-            function sortDragEnd(e) {
-                this.classList.remove('dragging');
-                dragSrc = null;
-            }
-            
-            function sortDragOver(e) {
-                e.preventDefault();
-                if (dragSrc !== this) {
-                    this.classList.add('drag-over');
-                }
-            }
-            
-            function sortDragLeave(e) {
-                this.classList.remove('drag-over');
-            }
-            
-            function sortDrop(e) {
-                e.preventDefault();
-                this.classList.remove('drag-over');
-                
-                if (dragSrc && dragSrc !== this) {
-                    const parent = container;
-                    const children = Array.from(parent.children);
-                    const dragIndex = children.indexOf(dragSrc);
-                    const dropIndex = children.indexOf(this);
-                    
-                    if (dragIndex < dropIndex) {
-                        this.parentNode.insertBefore(dragSrc, this.nextSibling);
-                    } else {
-                        this.parentNode.insertBefore(dragSrc, this);
+            // Update module progress
+            moduleAnswered = [0, 0];
+            for (let qid in userAnswers) {
+                if (userAnswers[qid] && userAnswers[qid] !== '') {
+                    let qCard = document.querySelector(`.question-card[data-question-id="${qid}"]`);
+                    if (qCard) {
+                        let moduleIdx = parseInt(qCard.dataset.module);
+                        if (!isNaN(moduleIdx)) moduleAnswered[moduleIdx]++;
                     }
-                    
-                    updatePositionNumbers(container);
-                    saveSortOrder(container);
                 }
+            }
+            for (let i = 0; i < moduleCounts.length; i++) {
+                let span = document.querySelector(`.module-answered-${i}`);
+                if (span) span.textContent = moduleAnswered[i];
             }
         }
         
-        function updatePositionNumbers(container) {
-            const items = container.querySelectorAll('.sort-item');
-            items.forEach((item, index) => {
-                const positionSpan = item.querySelector('.sort-position');
-                if (positionSpan) {
-                    positionSpan.textContent = index + 1;
-                }
+        // Drag Label
+        document.querySelectorAll('.drag-option').forEach(el => {
+            el.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', el.dataset.value);
             });
-        }
-        
-        function saveSortOrder(container) {
-            const questionId = container.getAttribute('data-question-id');
-            const items = container.querySelectorAll('.sort-item');
-            const order = Array.from(items).map(item => item.getAttribute('data-value'));
-            
-            userAnswers[questionId] = order;
-            document.getElementById(`answer_${questionId}`).value = JSON.stringify(order);
-            updateScore();
-        }
-        
-        // Initialize all drag-sort containers
-        document.querySelectorAll('.sort-items-list').forEach(container => {
-            initializeDragSort(container);
-            container.addEventListener('dragover', (e) => e.preventDefault());
         });
         
-        // Initialize drag label
-        initializeDragLabel();
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', e => e.preventDefault());
+            zone.addEventListener('dragenter', e => e.preventDefault());
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                const value = e.dataTransfer.getData('text/plain');
+                const qId = zone.dataset.questionId;
+                
+                zone.innerHTML = '';
+                zone.style.border = '2px solid #4CAF50';
+                zone.style.background = '#e8f5e9';
+                
+                const dropped = document.createElement('div');
+                dropped.className = 'dropped-item';
+                dropped.innerHTML = `${value} <button class="remove-btn" onclick="removeAnswer(this, '${qId}')">×</button>`;
+                zone.appendChild(dropped);
+                
+                userAnswers[qId] = value;
+                document.getElementById(`answer_${qId}`).value = value;
+                updateScore();
+            });
+        });
         
-        // ========== SUBMIT QUIZ ==========
-        async function submitQuiz() {
-            const unanswered = [];
-            for (let i = 0; i < totalQuestions; i++) {
-                const qContainer = document.querySelectorAll('.question-container')[i];
-                if (qContainer) {
-                    const qId = qContainer.getAttribute('data-question-id');
-                    if (!userAnswers[qId] || userAnswers[qId] === '' || 
-                        (Array.isArray(userAnswers[qId]) && userAnswers[qId].length === 0)) {
-                        unanswered.push(i + 1);
-                    }
-                }
-            }
+        function removeAnswer(btn, qId) {
+            const zone = btn.closest('.drop-zone');
+            zone.innerHTML = '🎯 Drop your answer here';
+            zone.style.border = '2px dashed #aaa';
+            zone.style.background = '#f8f9fa';
+            delete userAnswers[qId];
+            document.getElementById(`answer_${qId}`).value = '';
+            updateScore();
+        }
+        
+        // Drag Sort
+        document.querySelectorAll('.sort-items-list').forEach(container => {
+            let dragSrc = null;
             
-            if (unanswered.length > 0) {
-                if (!confirm(`You have ${unanswered.length} unanswered question(s) (${unanswered.join(', ')}). Submit anyway?`)) {
-                    return;
-                }
-            }
-            
-            const answers = [];
-            for (let qid in userAnswers) {
-                let answer = userAnswers[qid];
-                const qContainer = document.querySelector(`.question-container[data-question-id="${qid}"]`);
-                const qType = qContainer ? qContainer.getAttribute('data-question-type') : null;
-                
-                if (qType === 'drag_sort') {
-                    if (typeof answer === 'string') {
-                        try {
-                            answer = JSON.parse(answer);
-                        } catch(e) {
-                            answer = answer.split(',');
-                        }
-                    }
-                }
-                
-                answers.push({
-                    question_id: parseInt(qid),
-                    answer: answer,
-                    q_type: qType
+            function updatePositions() {
+                const items = container.querySelectorAll('.sort-item');
+                items.forEach((item, idx) => {
+                    const posSpan = item.querySelector('.sort-position');
+                    if (posSpan) posSpan.textContent = idx + 1;
                 });
+            }
+            
+            function saveOrder() {
+                const qId = container.dataset.questionId;
+                const items = container.querySelectorAll('.sort-item');
+                const order = Array.from(items).map(item => item.dataset.value);
+                userAnswers[qId] = order;
+                document.getElementById(`answer_${qId}`).value = JSON.stringify(order);
+                updateScore();
+            }
+            
+            container.querySelectorAll('.sort-item').forEach(item => {
+                item.addEventListener('dragstart', e => {
+                    dragSrc = item;
+                    e.dataTransfer.setData('text/plain', item.dataset.value);
+                    item.style.opacity = '0.5';
+                });
+                item.addEventListener('dragend', e => {
+                    if (dragSrc) dragSrc.style.opacity = '1';
+                    dragSrc = null;
+                });
+                item.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    if (dragSrc !== item) item.style.borderTop = '3px solid #ff9800';
+                });
+                item.addEventListener('dragleave', () => item.style.borderTop = 'none');
+                item.addEventListener('drop', e => {
+                    e.preventDefault();
+                    item.style.borderTop = 'none';
+                    if (dragSrc && dragSrc !== item) {
+                        const children = Array.from(container.children);
+                        const dragIdx = children.indexOf(dragSrc);
+                        const dropIdx = children.indexOf(item);
+                        if (dragIdx < dropIdx) {
+                            container.insertBefore(dragSrc, item.nextSibling);
+                        } else {
+                            container.insertBefore(dragSrc, item);
+                        }
+                        updatePositions();
+                        saveOrder();
+                    }
+                    if (dragSrc) dragSrc.style.opacity = '1';
+                    dragSrc = null;
+                });
+            });
+            updatePositions();
+        });
+        
+        async function submitQuiz() {
+            let unanswered = [];
+            for (let i = 0; i < totalQuestions; i++) {
+                let qCard = document.querySelectorAll('.question-card')[i];
+                let qId = qCard.dataset.questionId;
+                if (!userAnswers[qId]) unanswered.push(i + 1);
+            }
+            
+            if (unanswered.length > 0 && !confirm(`You have ${unanswered.length} unanswered question(s). Submit anyway?`)) {
+                return;
+            }
+            
+            let answers = [];
+            for (let qid in userAnswers) {
+                answers.push({ question_id: parseInt(qid), answer: userAnswers[qid] });
             }
             
             try {
-                const response = await fetch('/submit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ answers: answers })
+                let response = await fetch('/submit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ answers: answers }) });
+                let results = await response.json();
+                
+                document.getElementById('quiz-form').style.display = 'none';
+                let html = `<div class="result-header"><h2>📊 Quiz Results</h2><p>Score: ${results.score}/${results.total} (${results.percentage}%)</p><p>${results.passed ? '✅ Congratulations! You passed!' : '❌ Keep practicing!'}</p></div>`;
+                
+                results.results.forEach((r, i) => {
+                    let givenDisplay = r.given_answer || '(no answer)';
+                    let correctDisplay = r.correct_answer;
+                    if (r.q_type === 'drag_sort') {
+                        if (givenDisplay !== '(no answer)') givenDisplay = givenDisplay.split(',').join(' → ');
+                        correctDisplay = correctDisplay.split(',').join(' → ');
+                    }
+                    html += `<div class="result-card ${r.correct ? 'correct' : 'incorrect'}">
+                        <p><strong>${r.correct ? '✅' : '❌'} Question ${i+1}:</strong> ${r.prompt}</p>
+                        <p><strong>Your answer:</strong> ${givenDisplay}</p>
+                        ${!r.correct ? `<p><strong>Correct answer:</strong> ${correctDisplay}</p>` : ''}
+                    </div>`;
                 });
                 
-                const results = await response.json();
-                displayResults(results);
-            } catch (error) {
-                console.error('Error submitting quiz:', error);
-                alert('There was an error submitting your quiz. Please try again.');
-            }
-        }
-        
-        function displayResults(results) {
-            const quizForm = document.getElementById('quiz-form');
-            const resultsDiv = document.getElementById('results');
-            
-            quizForm.style.display = 'none';
-            resultsDiv.style.display = 'block';
-            
-            let html = `
-                <div class="result-header">
-                    <h2>📊 Quiz Results</h2>
-                    <p>Score: ${results.score}/${results.total} (${results.percentage}%)</p>
-                    <p>${results.passed ? '✅ Congratulations! You passed!' : '❌ Keep practicing! You can try again.'}</p>
-                </div>
-                <h3 style="margin-bottom: 20px;">📝 Detailed Results:</h3>
-            `;
-            
-            results.results.forEach((result, index) => {
-                let correctAnswerDisplay = result.correct_answer;
-                let givenAnswerDisplay = result.given_answer || '(no answer)';
-                
-                if (result.q_type === 'drag_sort') {
-                    try {
-                        const correctArr = result.correct_answer.includes(',') ? 
-                            result.correct_answer.split(',') : JSON.parse(result.correct_answer);
-                        correctAnswerDisplay = correctArr.join(' → ');
-                    } catch(e) {}
-                    
-                    try {
-                        let givenArr = result.given_answer;
-                        if (givenArr && givenArr !== '(no answer)') {
-                            if (givenArr.includes(',')) givenArr = givenArr.split(',');
-                            else if (givenArr.startsWith('[')) givenArr = JSON.parse(givenArr);
-                            givenAnswerDisplay = Array.isArray(givenArr) ? givenArr.join(' → ') : givenArr;
-                        }
-                    } catch(e) {}
-                }
-                
-                html += `
-                    <div class="result-card ${result.correct ? 'correct' : 'incorrect'}">
-                        <p><strong>${result.correct ? '✅' : '❌'} Question ${index + 1}:</strong> ${result.prompt}</p>
-                        <p><strong>Your answer:</strong> ${givenAnswerDisplay}</p>
-                        ${!result.correct ? `<p><strong>Correct answer:</strong> ${correctAnswerDisplay}</p>` : ''}
-                        ${result.image_path ? `<img src="/static/${result.image_path}" style="max-width:200px; margin-top:10px; border-radius:8px;">` : ''}
-                    </div>
-                `;
-            });
-            
-            html += `
-                <div class="action-buttons">
-                    <button class="btn-retake" onclick="location.reload()">🔄 Take Another Quiz</button>
-                    <button class="btn-leaderboard" onclick="window.location.href='/leaderboard'">🏆 View Leaderboard</button>
+                html += `<div class="action-buttons">
+                    <button class="btn-retake" onclick="location.reload()">🔄 Retake Quiz</button>
+                    <button class="btn-leaderboard" onclick="window.location.href='/leaderboard'">🏆 Leaderboard</button>
                     <button class="btn-logout" onclick="window.location.href='/logout'">🚪 Logout</button>
-                </div>
-            `;
-            
-            resultsDiv.innerHTML = html;
-            resultsDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                </div>`;
+                
+                document.getElementById('results').innerHTML = html;
+                document.getElementById('results').style.display = 'block';
+            } catch (error) {
+                alert('Error submitting quiz. Please try again.');
+            }
         }
         
-        // Prevent default drag on images
-        window.addEventListener('dragstart', function(e) {
-            if (!e.target.classList.contains('drag-option') && !e.target.classList.contains('sort-item')) {
-                e.preventDefault();
-            }
-        });
-        
-        console.log('Quiz initialized with', totalQuestions, 'questions');
+        updateScore();
     </script>
 </body>
 </html>

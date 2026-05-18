@@ -33,7 +33,6 @@ def student_login():
             flash("Please enter your name.", "error")
             return render_template("student_login.html")
         
-        # Check if student already exists
         student = Student.query.filter_by(name=name, class_name=cls).first()
         if not student:
             student = Student(name=name, class_name=cls)
@@ -51,12 +50,10 @@ def student_login():
 
 @app.route("/login")
 def login():
-    """Redirect to student login"""
     return redirect(url_for("student_login"))
 
 @app.route("/register")
 def register():
-    """Redirect to student login"""
     return redirect(url_for("student_login"))
 
 
@@ -67,37 +64,77 @@ def quiz():
     if "student_id" not in session:
         return redirect(url_for("student_login"))
 
-    # Draw a balanced mix: ~75% label, ~25% sort
-    n_total = app.config["QUESTIONS_PER_QUIZ"]
-    n_sort  = max(3, n_total // 4)
-    n_label = n_total - n_sort
-
-    label_qs = (Question.query
-                .filter_by(q_type="drag_label")
-                .order_by(func.random())
-                .limit(n_label).all())
-
-    sort_qs  = (Question.query
-                .filter_by(q_type="drag_sort")
-                .order_by(func.random())
-                .limit(n_sort).all())
-
-    questions = label_qs + sort_qs
-    # Shuffle so sort questions don't all appear at the end
-    random.shuffle(questions)
-
-    # STORE ALL QUESTION IDs in session
-    session["question_ids"] = [q.id for q in questions]
-    session["total_questions"] = len(questions)
-    session["start_time"] = datetime.utcnow().isoformat()
+    # MODULE 1: Hardware & Software (10 questions)
+    module1_topics = ["Computer Hardware", "Computer Ports", "Software"]
+    module1_questions = []
+    for topic in module1_topics:
+        qs = Question.query.filter(Question.topic.like(f"{topic}%")).all()
+        module1_questions.extend(qs)
+    
+    # Remove duplicates
+    seen = set()
+    module1_unique = []
+    for q in module1_questions:
+        if q.id not in seen:
+            seen.add(q.id)
+            module1_unique.append(q)
+    
+    # Select 10 random from module 1
+    if len(module1_unique) >= 10:
+        module1_selected = random.sample(module1_unique, 10)
+    else:
+        module1_selected = module1_unique
+    
+    # MODULE 2: Phone Repair (10 questions)
+    module2_topics = ["Phone Repair", "GSM Knowledge", "Tools & Safety"]
+    module2_questions = []
+    for topic in module2_topics:
+        qs = Question.query.filter(Question.topic.like(f"{topic}%")).all()
+        module2_questions.extend(qs)
+    
+    # Remove duplicates
+    seen2 = set()
+    module2_unique = []
+    for q in module2_questions:
+        if q.id not in seen2:
+            seen2.add(q.id)
+            module2_unique.append(q)
+    
+    # Select 10 random from module 2
+    if len(module2_unique) >= 10:
+        module2_selected = random.sample(module2_unique, 10)
+    else:
+        module2_selected = module2_unique
+    
+    # Store in session
+    all_questions = module1_selected + module2_selected
+    session["question_ids"] = [q.id for q in all_questions]
+    session["total_questions"] = len(all_questions)
+    
+    # Prepare modules for template
+    modules_data = [
+        {
+            "name": "Module 1: Computer Hardware & Software",
+            "icon": "🖥️",
+            "color": "#1a237e",
+            "questions": [q.to_dict() for q in module1_selected],
+            "count": len(module1_selected)
+        },
+        {
+            "name": "Module 2: Phone Repair & Maintenance",
+            "icon": "📱🔧",
+            "color": "#ff9800",
+            "questions": [q.to_dict() for q in module2_selected],
+            "count": len(module2_selected)
+        }
+    ]
 
     return render_template(
         "quiz.html",
-        questions=[q.to_dict() for q in questions],
+        modules=modules_data,
         student_name=session["student_name"],
-        total_questions=len(questions)
+        total_questions=len(all_questions)
     )
-
 @app.route("/submit", methods=["POST"])
 def submit():
     if "student_id" not in session:
@@ -106,7 +143,6 @@ def submit():
     data = request.get_json()
     answers = data.get("answers", [])
     
-    # Get the total number of questions from session
     total_questions = len(session.get("question_ids", []))
     
     if total_questions == 0:
@@ -123,20 +159,16 @@ def submit():
     results = []
     score = 0
     
-    # Create a map of submitted answers by question_id
     answer_map = {item["question_id"]: item for item in answers}
     
-    # Loop through ALL questions from the session
     for question_id in session.get("question_ids", []):
         q = Question.query.get(question_id)
         if not q:
             continue
         
-        # Check if this question was answered
         if question_id in answer_map:
             item = answer_map[question_id]
             
-            # Handle different question types
             if q.q_type == "drag_sort":
                 given_array = item.get("answer", [])
                 if isinstance(given_array, str):
@@ -156,7 +188,6 @@ def submit():
                 correct = given == q.answer.strip().lower()
                 given_str = given
         else:
-            # Question was not answered
             correct = False
             given_str = "(no answer provided)"
         
@@ -181,7 +212,6 @@ def submit():
             "prompt": q.prompt,
         })
     
-    # Calculate percentage based on TOTAL questions
     pct = round((score / total_questions) * 100, 1) if total_questions > 0 else 0
     attempt.score = score
     attempt.percentage = pct
@@ -198,9 +228,7 @@ def submit():
 
 @app.route("/leaderboard")
 def leaderboard():
-    """Return leaderboard page or JSON"""
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        # Return JSON for AJAX requests
         top = (db.session.query(Student.name, Student.class_name,
                                 db.func.max(Attempt.percentage).label("best_pct"),
                                 db.func.count(Attempt.id).label("attempts"))
@@ -215,12 +243,10 @@ def leaderboard():
                 for r in top]
         return jsonify(rows)
     else:
-        # Return HTML page
         return render_template("leaderboard.html")
 
 @app.route("/logout")
 def logout():
-    """Student logout"""
     session.pop("student_id", None)
     session.pop("student_name", None)
     session.pop("user_type", None)
@@ -232,12 +258,10 @@ def logout():
 
 @app.route("/admin/login", methods=["GET", "POST"])
 def admin_login():
-    """Admin login page"""
     if request.method == "POST":
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "").strip()
         
-        # Default admin credentials (you should change these in production)
         if username == "admin" and password == "admin123":
             session["admin_id"] = 1
             session["admin_name"] = "Administrator"
@@ -251,11 +275,9 @@ def admin_login():
 
 @app.route("/admin/dashboard")
 def admin_dashboard():
-    """Admin dashboard - view all students and their scores"""
     if "admin_id" not in session:
         return redirect(url_for("admin_login"))
     
-    # Get all students with their attempt statistics
     students = db.session.query(
         Student.id,
         Student.name,
@@ -266,7 +288,6 @@ def admin_dashboard():
         db.func.sum(Attempt.passed).label("passed_count")
     ).outerjoin(Attempt).group_by(Student.id).order_by(Student.name).all()
     
-    # Get recent attempts
     recent_attempts = db.session.query(
         Attempt.id,
         Attempt.score,
@@ -277,7 +298,6 @@ def admin_dashboard():
         Student.class_name
     ).join(Student).order_by(Attempt.finished_at.desc()).limit(20).all()
     
-    # Overall statistics
     total_students = db.session.query(db.func.count(Student.id)).scalar() or 0
     total_attempts = db.session.query(db.func.count(Attempt.id)).scalar() or 0
     avg_score = db.session.query(db.func.avg(Attempt.percentage)).scalar() or 0
@@ -303,7 +323,6 @@ def admin_dashboard():
 
 @app.route("/admin/student/<int:student_id>")
 def admin_student_detail(student_id):
-    """View detailed attempts for a specific student"""
     if "admin_id" not in session:
         return redirect(url_for("admin_login"))
     
@@ -318,14 +337,12 @@ def admin_student_detail(student_id):
 
 @app.route("/admin/attempt/<int:attempt_id>")
 def admin_attempt_detail(attempt_id):
-    """View detailed answers for a specific attempt"""
     if "admin_id" not in session:
         return redirect(url_for("admin_login"))
     
     attempt = Attempt.query.get_or_404(attempt_id)
     details = AttemptDetail.query.filter_by(attempt_id=attempt_id).all()
     
-    # Get question details
     questions = []
     for detail in details:
         question = Question.query.get(detail.question_id)
@@ -348,7 +365,6 @@ def admin_attempt_detail(attempt_id):
 
 @app.route("/admin/export_results")
 def admin_export_results():
-    """Export all results as CSV"""
     if "admin_id" not in session:
         return redirect(url_for("admin_login"))
     
@@ -356,7 +372,6 @@ def admin_export_results():
     from io import StringIO
     from flask import Response
     
-    # Query all attempts with student info
     results = db.session.query(
         Student.name,
         Student.class_name,
@@ -366,7 +381,6 @@ def admin_export_results():
         Attempt.finished_at
     ).join(Attempt).order_by(Attempt.finished_at.desc()).all()
     
-    # Create CSV
     output = StringIO()
     writer = csv.writer(output)
     writer.writerow(["Student Name", "Class", "Score", "Percentage", "Passed", "Date"])
@@ -390,34 +404,11 @@ def admin_export_results():
 
 @app.route("/admin/logout")
 def admin_logout():
-    """Admin logout"""
     session.pop("admin_id", None)
     session.pop("admin_name", None)
     session.pop("user_type", None)
     flash("Logged out from admin panel", "success")
     return redirect(url_for("index"))
-
-
-# ========== HELPER FUNCTIONS ==========
-
-def _check_category(given: dict, expected_str: str) -> bool:
-    """
-    expected_str format: "input:Keyboard,Mouse|output:Printer,Monitor"
-    given format:        {"input": ["Keyboard","Mouse"], "output": ["Printer","Monitor"]}
-    """
-    try:
-        expected = {}
-        for part in expected_str.split("|"):
-            cat, items = part.split(":")
-            expected[cat] = set(i.strip().lower() for i in items.split(","))
-
-        for cat, items in expected.items():
-            given_set = set(i.strip().lower() for i in given.get(cat, []))
-            if given_set != items:
-                return False
-        return True
-    except Exception:
-        return False
 
 
 if __name__ == "__main__":
