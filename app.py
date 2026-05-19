@@ -114,14 +114,14 @@ def quiz():
     # Prepare modules for template
     modules_data = [
         {
-            "name": "Module 1: Computer Hardware & Software",
+            "name": "Module 1: Computer Hardware",
             "icon": "🖥️",
             "color": "#1a237e",
             "questions": [q.to_dict() for q in module1_selected],
             "count": len(module1_selected)
         },
         {
-            "name": "Module 2: Phone Repair & Maintenance",
+            "name": "Module 2: Phone Repair",
             "icon": "📱🔧",
             "color": "#ff9800",
             "questions": [q.to_dict() for q in module2_selected],
